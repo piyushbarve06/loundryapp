@@ -1,0 +1,222 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{util.translate('Earnings')}} </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="earning-content">
+    <ion-label class="title-info">{{util.translate('Earnings')}} </ion-label>
+    <br>
+    <ion-segment [(ngModel)]="currentStat" (ionChange)="segmentChanged($event)" mode="ios" color="primary">
+      <ion-segment-button value="daily">
+        <ion-label>{{util.translate('Daily')}} </ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="monthly">
+        <ion-label>{{util.translate('Monthly')}} </ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="yearly">
+        <ion-label>{{util.translate('Yearly')}} </ion-label>
+      </ion-segment-button>
+    </ion-segment>
+    <br>
+
+    <div *ngIf="currentStat == 'daily'">
+      <div class="date-slot">
+        <ion-icon name="chevron-back-outline" class="icon-name" (click)="backMonth()"></ion-icon>
+        <ion-label> {{getName()}} </ion-label>
+        <ion-icon name="chevron-forward-outline" class="icon-name" (click)="nextMonth()"></ion-icon>
+      </div>
+
+      <br>
+      <div style="display: block;">
+        <div *ngIf="dailyAPICalled == true">
+          <canvas baseChart [datasets]="barChartDataDaily" [labels]="barChartLabelsDaily" [options]="barChartOptions"
+            [plugins]="barChartPlugins" [legend]="barChartLegend" [type]="barChartType">
+          </canvas>
+        </div>
+        <div *ngIf="dailyAPICalled == false" class="loader">
+          <ion-spinner name="circular" color="primary"></ion-spinner>
+        </div>
+      </div>
+      <br>
+      <ion-row *ngIf="dailyAPICalled == true && totalPrice >0">
+        <ion-col size="3">
+          <div class="content">
+            <ion-label class="item-price" *ngIf="util.cside =='left'"> {{util.currecny}}
+              {{totalPrice}} </ion-label>
+            <ion-label class="item-price" *ngIf="util.cside =='right'">{{totalPrice}}
+              {{util.currecny}}</ion-label>
+            <ion-label class="title"> {{util.translate('Total')}} </ion-label>
+          </div>
+        </ion-col>
+        <ion-col size="3">
+          <div class="content">
+            <ion-label class="item-price" *ngIf="util.cside =='left'"> {{util.currecny}}
+              {{averagePrice}} </ion-label>
+            <ion-label class="item-price" *ngIf="util.cside =='right'">{{averagePrice}}</ion-label>
+            <ion-label class="title"> {{util.translate('Average')}} </ion-label>
+          </div>
+        </ion-col>
+        <ion-col size="6"></ion-col>
+      </ion-row>
+
+      <ion-card class="table-card" *ngIf="earningList.length > 0" mode="ios">
+        <ion-row style="padding: 10px 0px;">
+          <ion-col size="4">
+            <ion-label class="card-title">{{util.translate('Day')}} </ion-label>
+          </ion-col>
+          <ion-col size="4">
+            <ion-label class="card-title">{{util.translate('Orders')}} </ion-label>
+          </ion-col>
+          <ion-col size="4">
+            <ion-label class="card-title"> {{util.translate('Earning')}} </ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngFor="let item of earningList" class="list-item">
+          <ion-col size="4">
+            <ion-label class="card-content"> {{getDateTime(item.day_name)}} </ion-label>
+          </ion-col>
+          <ion-col size="4">
+            <ion-label class="card-content">{{item.count}}</ion-label>
+          </ion-col>
+          <ion-col size="4">
+            <ion-label class="card-content" *ngIf="util.cside =='left'"> {{util.currecny}}
+              {{item.total}} </ion-label>
+            <ion-label class="card-content" *ngIf="util.cside =='right'">{{item.total}}</ion-label>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </div>
+
+
+    <div *ngIf="currentStat == 'monthly'">
+      <div class="date-slot">
+        <ion-icon name="chevron-back-outline" class="icon-name" (click)="backYear()"></ion-icon>
+        <ion-label> {{currenyYear}} </ion-label>
+        <ion-icon name="chevron-forward-outline" class="icon-name" (click)="nextYear()"></ion-icon>
+      </div>
+
+      <br>
+      <div style="display: block;">
+        <div *ngIf="yearlyAPICalled == true">
+          <canvas baseChart [datasets]="barChartDataMonths" [labels]="barChartLabelsMonths" [options]="barChartOptions"
+            [plugins]="barChartPlugins" [legend]="barChartLegend" [type]="barChartType">
+          </canvas>
+        </div>
+        <div *ngIf="yearlyAPICalled == false" class="loader">
+          <ion-spinner name="circular" color="primary"></ion-spinner>
+        </div>
+      </div>
+      <br>
+      <ion-row *ngIf="yearlyAPICalled == true && yearlyTotalPrice >0">
+        <ion-col size="3">
+          <div class="content">
+            <ion-label class="item-price" *ngIf="util.cside =='left'"> {{util.currecny}}
+              {{yearlyTotalPrice}} </ion-label>
+            <ion-label class="item-price" *ngIf="util.cside =='right'">{{yearlyTotalPrice}}
+              {{util.currecny}}</ion-label>
+            <ion-label class="title">{{util.translate('Total')}} </ion-label>
+          </div>
+        </ion-col>
+        <ion-col size="3">
+          <div class="content">
+            <ion-label class="item-price" *ngIf="util.cside =='left'"> {{util.currecny}}
+              {{yearlyAveragePrice}} </ion-label>
+            <ion-label class="item-price" *ngIf="util.cside =='right'">{{yearlyAveragePrice}}</ion-label>
+            <ion-label class="title"> {{util.translate('Average')}} </ion-label>
+          </div>
+        </ion-col>
+        <ion-col size="6"></ion-col>
+      </ion-row>
+
+      <ion-card class="table-card" *ngIf="yearlyEarningList.length > 0" mode="ios">
+        <ion-row style="padding: 10px 0px;">
+          <ion-col size="4">
+            <ion-label class="card-title"> {{util.translate('Day')}} </ion-label>
+          </ion-col>
+          <ion-col size="4">
+            <ion-label class="card-title"> {{util.translate('Orders')}} </ion-label>
+          </ion-col>
+          <ion-col size="4">
+            <ion-label class="card-title"> {{util.translate('Earning')}} </ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngFor="let item of yearlyEarningList" class="list-item">
+          <ion-col size="4">
+            <ion-label class="card-content"> {{getMonthName(item.day_name)}} </ion-label>
+          </ion-col>
+          <ion-col size="4">
+            <ion-label class="card-content">{{item.count}}</ion-label>
+          </ion-col>
+          <ion-col size="4">
+            <ion-label class="card-content" *ngIf="util.cside =='left'"> {{util.currecny}}
+              {{item.total}} </ion-label>
+            <ion-label class="card-content" *ngIf="util.cside =='right'">{{item.total}}</ion-label>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </div>
+
+    <div *ngIf="currentStat == 'yearly'">
+      <div style="display: block;">
+        <div *ngIf="allAPICalled == true">
+          <canvas baseChart [datasets]="barChartDataAll" [labels]="barChartLabelsAll" [options]="barChartOptions"
+            [plugins]="barChartPlugins" [legend]="barChartLegend" [type]="barChartType">
+          </canvas>
+        </div>
+        <div *ngIf="allAPICalled == false" class="loader">
+          <ion-spinner name="circular" color="primary"></ion-spinner>
+        </div>
+      </div>
+      <br>
+      <ion-row *ngIf="allAPICalled == true && allTotalPrice >0">
+        <ion-col size="3">
+          <div class="content">
+            <ion-label class="item-price" *ngIf="util.cside =='left'"> {{util.currecny}}
+              {{allTotalPrice}} </ion-label>
+            <ion-label class="item-price" *ngIf="util.cside =='right'">{{allTotalPrice}}
+              {{util.currecny}}</ion-label>
+            <ion-label class="title"> {{util.translate('Total')}} </ion-label>
+          </div>
+        </ion-col>
+        <ion-col size="3">
+          <div class="content">
+            <ion-label class="item-price" *ngIf="util.cside =='left'"> {{util.currecny}}
+              {{allAveratePrice}} </ion-label>
+            <ion-label class="item-price" *ngIf="util.cside =='right'">{{allAveratePrice}}</ion-label>
+            <ion-label class="title">{{util.translate('Average')}} </ion-label>
+          </div>
+        </ion-col>
+        <ion-col size="6"></ion-col>
+      </ion-row>
+
+      <ion-card class="table-card" *ngIf="allEarningList.length > 0" mode="ios">
+        <ion-row style="padding: 10px 0px;">
+          <ion-col size="4">
+            <ion-label class="card-title">{{util.translate('Day')}} </ion-label>
+          </ion-col>
+          <ion-col size="4">
+            <ion-label class="card-title"> {{util.translate('Orders')}} </ion-label>
+          </ion-col>
+          <ion-col size="4">
+            <ion-label class="card-title"> {{util.translate('Earning')}} </ion-label>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngFor="let item of allEarningList" class="list-item">
+          <ion-col size="4">
+            <ion-label class="card-content"> {{item.day}} </ion-label>
+          </ion-col>
+          <ion-col size="4">
+            <ion-label class="card-content">{{item.count}}</ion-label>
+          </ion-col>
+          <ion-col size="4">
+            <ion-label class="card-content" *ngIf="util.cside =='left'"> {{util.currecny}}
+              {{item.total}} </ion-label>
+            <ion-label class="card-content" *ngIf="util.cside =='right'">{{item.total}}</ion-label>
+          </ion-col>
+        </ion-row>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

@@ -1,0 +1,49 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{util.translate("Select Driver")}} </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngIf="apiCalled == false">
+    <ion-item *ngFor="let item of [1,2,3,4,5,6,7,8,9,0]">
+      <ion-avatar slot="start">
+        <ion-skeleton-text animated></ion-skeleton-text>
+      </ion-avatar>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+
+  <ion-list *ngIf="apiCalled == true">
+    <ion-radio-group [(ngModel)]="driverId">
+      <ion-item *ngFor="let item of list">
+        <ion-avatar slot="start">
+          <img [src]="api.mediaURL + item.cover" alt="">
+        </ion-avatar>
+        <ion-label>
+          <h2>
+            {{item.first_name}} {{item.last_name}}
+          </h2>
+          <p> {{util.translate("Distance")}} {{item.distance}} {{distanceType}} </p>
+        </ion-label>
+        <ion-radio slot="end" mode="md" [value]="item.id"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
+  </ion-list>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="driverId">
+    <ion-fab-button (click)="selected()">
+      <ion-icon name="checkmark-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>

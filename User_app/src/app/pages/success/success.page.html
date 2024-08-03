@@ -1,0 +1,14 @@
+<ion-content>
+  <div class="main_content_div_success">
+    <ion-icon name="checkmark-circle-outline"></ion-icon>
+    <ion-label class="head_lbl"> {{util.translate('Your Order Created Sucessfully')}} </ion-label>
+    <ion-label class="simple_lbl">{{util.translate('You can view the order tracking info in the')}} <span>'
+        {{util.translate('Profile')}} '</span> {{util.translate('section')}} .</ion-label>
+
+    <ion-button (click)="goToHome()" expand="block" shape="round">
+      {{util.translate('Go to Home')}}
+    </ion-button>
+
+    <ion-label class="simple_lbl" (click)="goToOrderInfo()"> {{util.translate('Go to Order')}} </ion-label>
+  </div>
+</ion-content>

@@ -1,0 +1,79 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" mode="ios">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()">
+        <ion-icon slot="icon-only" name="arrow-back" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{util.translate("Register Complaints")}} </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="item-complaints" [ngClass]="submitted == true && issue_with =='' ? 'redBorder':''">
+    <ion-label class="title">{{util.translate('Issue With')}} </ion-label>
+    <ion-select [(ngModel)]="issue_with" [placeholder]="util.translate('Issue with')">
+      <ion-select-option [value]="1">{{util.translate('Order')}} </ion-select-option>
+      <ion-select-option [value]="2">{{util.translate('Store')}} </ion-select-option>
+      <ion-select-option *ngIf="haveDriver == true" [value]="3">{{util.translate('Driver')}} </ion-select-option>
+      <ion-select-option [value]="4">{{util.translate('Service')}} </ion-select-option>
+    </ion-select>
+  </div>
+
+  <div *ngIf="issue_with == 2 || issue_with == 1" class="item-complaints"
+    [ngClass]="submitted == true && storeUID =='' ? 'redBorder':''">
+    <ion-label class="title">{{util.translate('Select Store')}} </ion-label>
+    <ion-label class="title"> {{storeName}} </ion-label>
+  </div>
+
+  <div *ngIf="issue_with == 4" class="item-complaints"
+    [ngClass]="submitted == true && service_id =='' ? 'redBorder':''">
+    <ion-label class="title">{{util.translate('Select Service')}} </ion-label>
+    <ion-select [(ngModel)]="service_id" [placeholder]="util.translate('Select Service')">
+      <ion-select-option [value]="item.id" *ngFor="let item of items">{{item.name}}
+      </ion-select-option>
+    </ion-select>
+  </div>
+
+  <div *ngIf="issue_with == 3" class="item-complaints" [ngClass]="submitted == true && driverId =='' ? 'redBorder':''">
+    <ion-label class="title">{{util.translate('Select Driver')}}</ion-label>
+    <ion-label class="title"> {{driverName}} </ion-label>
+  </div>
+
+  <div class="item-complaints" [ngClass]="submitted == true && reason_id =='' ? 'redBorder':''">
+    <ion-label class="title">{{util.translate('Select reason')}} </ion-label>
+    <ion-select [(ngModel)]="reason_id" [placeholder]="util.translate('Select reason')">
+      <ion-select-option [value]="i" *ngFor="let item of reasons;let i = index">{{util.translate(item)}}
+      </ion-select-option>
+    </ion-select>
+  </div>
+
+  <div class="item-complaints" [ngClass]="submitted == true && title =='' ? 'redBorder':''">
+    <ion-label class="title">{{util.translate('Title')}} </ion-label>
+    <ion-input type="text" [(ngModel)]="title" [placeholder]="util.translate('Brief of your issue')"></ion-input>
+  </div>
+
+  <div class="item-complaints" [ngClass]="submitted == true && short_message =='' ? 'redBorder':''">
+    <ion-label class="title">{{util.translate('Comments')}} </ion-label>
+    <ion-textarea rows="5" [(ngModel)]="short_message" type="text"
+      [placeholder]="util.translate('write something on issue')">
+    </ion-textarea>
+  </div>
+
+  <ion-row>
+    <ion-col size="4" (click)="uploadImage()">
+      <div class="upload_tag">
+        <ion-icon slot="icon-only" name="cloud-upload-outline"></ion-icon>
+        <ion-label>{{util.translate('Upload Image')}} </ion-label>
+      </div>
+    </ion-col>
+    <ion-col size="4" *ngFor="let item of images">
+      <div class="image_div" [ngStyle]="{'background-image':'url('+api.mediaURL+item+'),url(assets/imgs/user.png)'}">
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <ion-button (click)="onSave()" mode="ios">
+    {{util.translate('Submit')}}
+  </ion-button>
+</ion-content>

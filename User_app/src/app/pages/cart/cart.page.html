@@ -1,0 +1,113 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" mode="ios">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()">
+        <ion-icon slot="icon-only" name="arrow-back" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{util.translate("Your Cart")}} </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="item-list" *ngIf="cart && cart.cart && cart.cart.length >0">
+    <ion-card class="item-content" *ngFor="let item of cart.cart;let i = index" mode="ios">
+      <ion-row style="padding: 0px !important;">
+        <ion-col size="2" class="image-content">
+          <div [ngStyle]="{'background-image':'url('+api.mediaURL+item.cover+'),url(assets/imgs/placeholder.jpeg)'}"
+            class="item-image">
+          </div>
+        </ion-col>
+        <ion-col size="1"></ion-col>
+        <ion-col size="5">
+          <ion-label class="item-name"> {{item.name}} </ion-label>
+          <ion-label class="item-price" *ngIf="item.discount == 0 && util.cside =='left'"> {{util.currecny}}
+            {{item.original_price}} </ion-label>
+          <ion-label class="item-price" *ngIf="item.discount == 0 && util.cside =='right'">{{item.original_price}}
+            {{util.currecny}}</ion-label>
+          <ion-label class="item-price" *ngIf="item.discount != 0">
+            <span class="original" *ngIf="util.cside =='left'"> {{util.currecny}} {{item.original_price}} </span>
+            <span class="sell" *ngIf="util.cside =='left'">{{util.currecny}} {{item.sell_price}} </span>
+            <span class="original" *ngIf="util.cside =='right'"> {{item.original_price}} {{util.currecny}}</span>
+            <span class="sell" *ngIf="util.cside =='right'"> {{item.sell_price}} {{util.currecny}}</span>
+          </ion-label>
+        </ion-col>
+        <ion-col size="4">
+          <div class="quantity">
+            <div class="ion-activatable quantity-button-remove" (click)="saveCartAction(i,item,'remove')">
+              <ion-icon slot="icon-only" name="remove-circle" color="light"></ion-icon>
+              <ion-ripple-effect type="bounded"></ion-ripple-effect>
+            </div>
+            <ion-label class="quantity-numbers"> {{item.quantity}} </ion-label>
+            <div class="ion-activatable quantity-button-add" (click)="saveCartAction(i,item,'add')">
+              <ion-icon slot="icon-only" name="add-circle" color="light"></ion-icon>
+              <ion-ripple-effect type="bounded"></ion-ripple-effect>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+    <div class="spacer"></div>
+
+    <div class="cart-item-total">
+      <ion-label class="name">{{util.translate("Sub Total")}} </ion-label>
+      <ion-label class="price" *ngIf="util.cside =='left'"> {{util.currecny}}
+        {{cart.totalPrice}} </ion-label>
+      <ion-label class="price" *ngIf="util.cside =='right'">{{cart.totalPrice}}
+        {{util.currecny}}</ion-label>
+    </div>
+
+    <div class="cart-item-total">
+      <ion-label class="name">{{util.translate("Service Tax")}} </ion-label>
+      <ion-label class="price" *ngIf="util.cside =='left'"> {{util.currecny}}
+        {{cart.serviceTax}} </ion-label>
+      <ion-label class="price" *ngIf="util.cside =='right'">{{cart.serviceTax}}
+        {{util.currecny}}</ion-label>
+    </div>
+
+    <div class="cart-item-total-discount" *ngIf="cart && cart.coupon && cart.coupon.name">
+      <ion-label class="name">{{util.translate("Discount")}} ({{cart.coupon.name}}) {{cart.coupon.discount}} <span
+          *ngIf="cart.coupon.type == 0">%</span> <span *ngIf="cart.coupon.type == 1">{{util.currecny}}</span>
+      </ion-label>
+      <ion-label class="price" *ngIf="util.cside =='left'"> - {{util.currecny}}
+        {{cart.discount}} </ion-label>
+      <ion-label class="price" *ngIf="util.cside =='right'"> - {{cart.discount}}
+        {{util.currecny}}</ion-label>
+    </div>
+
+    <div class="spacer-line"></div>
+
+    <div class="cart-item-grand-total">
+      <ion-label class="name">{{util.translate("Grand Total")}} </ion-label>
+      <ion-label class="price" *ngIf="util.cside =='left'"> {{util.currecny}}
+        {{cart.grandTotal}} </ion-label>
+      <ion-label class="price" *ngIf="util.cside =='right'">{{cart.grandTotal}}
+        {{util.currecny}}</ion-label>
+    </div>
+
+  </div>
+
+  <div *ngIf="cart.cart?.length == 0" class="no-data">
+    <div [ngStyle]="{'background-image':'url(assets/imgs/no-data.jpg)'}" class="no-data-image"></div>
+    <ion-label class="title">{{util.translate("No Service In Cart")}} </ion-label>
+  </div>
+</ion-content>
+
+<ion-footer *ngIf="cart && cart.cart && cart.cart.length >0">
+  <ion-toolbar color="primary" class="ion-activatable" (click)="onCheckout()">
+    <div class="checkout-content">
+      <div class="cart-price-content">
+        <ion-label class="item-total">{{cart.totalItemInCart}} {{util.translate("Items")}} </ion-label>
+        <ion-label class="item-price" *ngIf="util.cside =='left'"> {{util.currecny}}
+          {{cart.grandTotal}} </ion-label>
+        <ion-label class="item-price" *ngIf="util.cside =='right'">{{cart.grandTotal}}
+          {{util.currecny}}</ion-label>
+      </div>
+      <div class="cart-checkout">
+        <ion-label class="item-text">{{util.translate("Place Order Now")}} &nbsp;</ion-label>
+        <ion-icon slot="end" name="arrow-forward"></ion-icon>
+      </div>
+    </div>
+    <ion-ripple-effect type="bounded"></ion-ripple-effect>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,28 @@
+<ion-content>
+  <div [ngStyle]="{'background-image': 'url(assets/imgs/location-background.png)'}" class="bg-image-location">
+    <ion-item class="translate" lines="none">
+      <ion-select [(ngModel)]="selectedLanguages" placeholder="English" interface="popover"
+        (ionChange)="translateApp()">
+        <ion-select-option [value]="item.code" *ngFor="let item of util.allLanguages">{{item.name}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <div>
+      <ion-label class="title">{{util.translate('We might be neighbors')}} </ion-label>
+    </div>
+    <div>
+      <ion-label class="sub-title">
+        {{util.translate("Enable geolocation so we'll never bother you about where you are")}}
+      </ion-label>
+
+      <ion-button expand="block" shape="round" class="location-button" (click)="onLocation()">
+        {{util.translate("Enable Geo Location")}}
+      </ion-button>
+      <ion-spinner *ngIf="isLoading == true" name="crescent" color="light"></ion-spinner>
+
+      <ion-button expand="block" fill="clear" color="light" (click)="chooseLocation()" class="choose-location-button">
+        {{util.translate("Choose Location")}}
+      </ion-button>
+    </div>
+  </div>
+
+</ion-content>

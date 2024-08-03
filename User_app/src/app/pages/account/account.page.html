@@ -1,0 +1,240 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="util.openMenu()">
+        <ion-icon slot="end" name="menu-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{util.translate('Settings')}} </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="item" *ngIf="util && util.userInfo && util.userInfo.first_name">
+    <ion-row>
+      <ion-col size="2">
+        <ion-thumbnail>
+          <img [src]="api.mediaURL+util.userInfo.cover" onError="this.src='assets/imgs/placeholder.jpeg'" />
+        </ion-thumbnail>
+      </ion-col>
+      <ion-col size="7">
+        <h6> {{util.userInfo.first_name}} {{util.userInfo.last_name}} </h6>
+        <ion-label> {{util.userInfo.email}} </ion-label>
+      </ion-col>
+      <ion-col size="3">
+        <ion-buttons (click)="editProfile()">
+          <ion-button color="dark">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-col>
+    </ion-row>
+  </div>
+
+  <div class="content">
+
+    <div class="title">
+      <h6>{{util.translate('Accounts')}} </h6>
+    </div>
+
+    <div class="items">
+      <ion-item lines="none" (click)="onLogin()" *ngIf="!util.userInfo || util.userInfo  == null || util.userInfo ==''">
+        <ion-buttons slot="start">
+          <ion-button color="dark">
+            <ion-icon name="person-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label>{{util.translate('Sign In / Sign Up')}} </ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="dark">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+      <ion-item lines="none" (click)="onOrders()" *ngIf="util && util.userInfo && util.userInfo.first_name">
+        <ion-buttons slot="start">
+          <ion-button color="dark">
+            <ion-icon name="newspaper-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label>{{util.translate('Orders History')}} </ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="dark">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+      <ion-item lines="none" (click)="onResetPassword()">
+        <ion-buttons slot="start">
+          <ion-button color="dark">
+            <ion-icon name="document-lock-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label>{{util.translate('Change Password')}} </ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="dark">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+      <ion-item lines="none" (click)="onLanguage()">
+        <ion-buttons slot="start">
+          <ion-button color="dark">
+            <ion-icon name="language-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label> {{util.translate('Languages')}} </ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="dark">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+      <ion-item lines="none" (click)="onContact()">
+        <ion-buttons slot="start">
+          <ion-button color="dark">
+            <ion-icon name="mail-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label>{{util.translate('Contact Us')}} </ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="dark">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+      <ion-item lines="none" (click)="onChats()" *ngIf="util && util.userInfo && util.userInfo.first_name">
+        <ion-buttons slot="start">
+          <ion-button color="dark">
+            <ion-icon name="chatbox-ellipses-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label>{{util.translate('Chats')}} </ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="dark">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+      <ion-item lines="none" (click)="onWallet()" *ngIf="util && util.userInfo && util.userInfo.first_name">
+        <ion-buttons slot="start">
+          <ion-button color="dark">
+            <ion-icon name="wallet-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label>{{util.translate("Wallet")}} </ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="dark">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+      <ion-item lines="none" (click)="onReferral()" *ngIf="util && util.userInfo && util.userInfo.first_name">
+        <ion-buttons slot="start">
+          <ion-button color="dark">
+            <ion-icon name="gift-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label>{{util.translate("Refer & Earn")}} </ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="dark">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+      <ion-item lines="none" (click)="logout()" *ngIf="util && util.userInfo && util.userInfo.first_name">
+        <ion-buttons slot="start">
+          <ion-button color="dark">
+            <ion-icon name="log-out-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label> {{util.translate("Sign Out")}} </ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="dark">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </div>
+
+    <div class="title">
+      <h6>{{util.translate("More Options")}} </h6>
+    </div>
+
+    <div class="items">
+
+      <ion-item lines="none" (click)="openPage('About Us','1')">
+        <ion-buttons slot="start">
+          <ion-button color="dark">
+            <ion-icon name="reader-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label>{{util.translate("About Us")}} </ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="dark">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+
+      <ion-item lines="none" (click)="openPage('Frequently Asked Questions','5')">
+        <ion-buttons slot="start">
+          <ion-button color="dark">
+            <ion-icon name="help-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label> {{util.translate("Frequently Asked Questions")}} </ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="dark">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+
+      <ion-item lines="none" (click)="openPage('Privacy Policy','2')">
+        <ion-buttons slot="start">
+          <ion-button color="dark">
+            <ion-icon name="lock-closed-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label>{{util.translate("Privacy Policy")}} </ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="dark">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+
+      <ion-item lines="none" (click)="openPage('Help','6')">
+        <ion-buttons slot="start">
+          <ion-button color="dark">
+            <ion-icon name="information-circle-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label>{{util.translate("Help")}} </ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="dark">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+
+      <ion-item lines="none" (click)="openPage('Terms & Conditions','3')">
+        <ion-buttons slot="start">
+          <ion-button color="dark">
+            <ion-icon name="flag-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-label>{{util.translate("Terms & Conditions")}} </ion-label>
+        <ion-buttons slot="end">
+          <ion-button color="dark">
+            <ion-icon name="chevron-forward-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </div>
+
+  </div>
+
+
+</ion-content>

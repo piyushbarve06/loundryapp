@@ -1,0 +1,378 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" mode="ios">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()">
+        <ion-icon slot="icon-only" name="arrow-back" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{util.translate("Checkout")}} </ion-title>
+  </ion-toolbar>
+  <ion-toolbar mode="md" class="topHeader">
+    <div class="header">
+      <ion-icon [name]="current >= 1 ? 'checkmark-circle':'radio-button-on-outline'"
+        [class]="current >= 1? 'filled':''">
+      </ion-icon>
+      <span [class]="current > 1 ?'fiilled-bg':''"></span>
+      <ion-icon [name]="current >= 2 ? 'checkmark-circle':'radio-button-on-outline'"
+        [class]="current >= 2? 'filled':''">
+      </ion-icon>
+      <span [class]="current > 2 ?'fiilled-bg':''"></span>
+      <ion-icon [name]="current >= 3 ? 'checkmark-circle':'radio-button-on-outline'"
+        [class]="current >= 3? 'filled':''">
+      </ion-icon>
+    </div>
+    <div class="text">
+      <ion-label class="first">{{util.translate('Delivery Options')}} </ion-label>
+      <ion-label class="second">{{util.translate('Delivery Address')}} </ion-label>
+      <ion-label class="third">{{util.translate('Payments')}}</ion-label>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <swiper-container #swiper [slidesPerView]="1" [allowTouchMove]="false" (slidechange)="onSlideChange()">
+    <swiper-slide>
+      <div class="delivery_options">
+        <p class="header"> {{util.translate('Delivery from')}} </p>
+        <ion-list lines="none" class="delivery">
+          <ion-radio-group [(ngModel)]="deliveryOption">
+            <ion-item>
+              <ion-thumbnail>
+                <img src="assets/imgs/home.png" />
+              </ion-thumbnail>
+              <ion-label> {{util.translate('At Home')}} </ion-label>
+              <ion-radio value="home" slot="end" mode="md"></ion-radio>
+            </ion-item>
+            <ion-item>
+              <ion-thumbnail>
+                <img src="assets/imgs/store.png" />
+              </ion-thumbnail>
+              <ion-label> {{util.translate('Self Pickup')}} </ion-label>
+              <ion-radio value="store" slot="end" mode="md"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-list>
+
+        <div *ngIf="deliveryOption == 'store'">
+          <p class="header"> {{util.translate('Store Information')}} </p>
+          <div class="stores">
+            <p class="name">
+              <ion-icon name="location-outline"></ion-icon> {{storeName}}
+            </p>
+            <p class="address"> {{storeAddress}} </p>
+          </div>
+        </div>
+
+        <div>
+          <p class="header"> {{util.translate('Select Date & Time')}} </p>
+          <ion-segment [(ngModel)]="slot" mode="md">
+            <ion-segment-button value="pickup">
+              <ion-label>{{util.translate("Pick Up")}} </ion-label>
+            </ion-segment-button>
+            <ion-segment-button value="drop">
+              <ion-label>{{util.translate("Delivery")}} </ion-label>
+            </ion-segment-button>
+          </ion-segment>
+
+          <div class="slots" *ngIf="slot =='pickup'">
+            <ion-card class="slot-date-title">
+              <ion-label class="title">{{util.translate("Select Pick up Date")}} </ion-label>
+              <div class="calender">
+                <swiper-container #slideDate>
+                  <swiper-slide>
+                    <ion-row class="row_cal">
+                      <ion-col size="0.75" (click)="previousWeek()">
+                        <ion-icon name="arrow-back-outline" mode="md" class="icon_change center_item"
+                          *ngIf="currentWeek != 0">
+                        </ion-icon>
+                      </ion-col>
+                      <ion-col *ngFor="let day of pickupDays"
+                        [class.disabled]="initDate.split('T')[0] > day.val.split('T')" size="1.5"
+                        (click)="selectDate(day)">
+                        <ion-label class="lbl_day" [class.selectedDay]="day.val.split('T')[0] == pickupDate">{{
+                          day.day }}
+                        </ion-label>
+                        <ion-label class="lbl_date" [class.selectedDate]="day.val.split('T')[0] == pickupDate">{{
+                          day.date }}
+                        </ion-label>
+
+                      </ion-col>
+                      <ion-col size="0.75" (click)="nextWeek()">
+                        <ion-icon name="arrow-forward-outline" mode="md" class="icon_change center_item"></ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </swiper-slide>
+                </swiper-container>
+
+              </div>
+            </ion-card>
+
+            <ion-card class="slot-date-title">
+              <ion-label class="title">{{util.translate("Select Pick up Time")}} </ion-label>
+              <div class="slot-loader" *ngIf="pickupSlotsCalled == false">
+                <ion-spinner name="circular" color="primary"></ion-spinner>
+              </div>
+              <ion-row *ngIf="pickupSlotsCalled == true">
+                <ion-col size="6" *ngFor="let item of pickupSlots"
+                  (click)="savePickupSlot(item.start_time+' - '+item.end_time)">
+                  <ion-chip [color]="pickupTime == item.start_time+' - '+item.end_time ? 'primary':'medium'"
+                    [outline]="pickupTime == item.start_time+' - '+item.end_time ? false:true">
+                    <ion-label> {{item.start_time}} - {{item.end_time}} </ion-label>
+                  </ion-chip>
+                </ion-col>
+              </ion-row>
+            </ion-card>
+          </div>
+
+          <div class="slots" *ngIf="slot =='drop'">
+            <ion-card class="slot-date-title">
+              <ion-label class="title">{{util.translate("Select Delivery Date")}} </ion-label>
+              <div class="calender">
+                <swiper-container #slideDate>
+                  <swiper-slide>
+                    <ion-row class="row_cal">
+                      <ion-col size="0.75" (click)="previousWeekDelivery()">
+                        <ion-icon name="arrow-back-outline" mode="md" class="icon_change center_item"
+                          *ngIf="currentWeek != 0">
+                        </ion-icon>
+                      </ion-col>
+                      <ion-col *ngFor="let day of deliveryDays"
+                        [class.disabled]="initDate.split('T')[0] > day.val.split('T')" size="1.5"
+                        (click)="selectDateDelivery(day)">
+                        <ion-label class="lbl_day" [class.selectedDay]="day.val.split('T')[0] == deliveryDate">{{
+                          day.day }}
+                        </ion-label>
+                        <ion-label class="lbl_date" [class.selectedDate]="day.val.split('T')[0] == deliveryDate">{{
+                          day.date }}
+                        </ion-label>
+
+                      </ion-col>
+                      <ion-col size="0.75" (click)="nextWeekDelivery()">
+                        <ion-icon name="arrow-forward-outline" mode="md" class="icon_change center_item"></ion-icon>
+                      </ion-col>
+                    </ion-row>
+                  </swiper-slide>
+                </swiper-container>
+              </div>
+            </ion-card>
+
+            <ion-card class="slot-date-title">
+              <ion-label class="title">{{util.translate("Select Pick up Time")}} </ion-label>
+              <div class="slot-loader" *ngIf="pickupSlotsCalled == false">
+                <ion-spinner name="circular" color="primary"></ion-spinner>
+              </div>
+              <ion-row *ngIf="pickupSlotsCalled == true">
+                <ion-col size="6" *ngFor="let item of deliverySlots"
+                  (click)="saveDeliverySlot(item.start_time+' - '+item.end_time)">
+                  <ion-chip [color]="deliveryTime == item.start_time+' - '+item.end_time ? 'primary':'medium'"
+                    [outline]="deliveryTime == item.start_time+' - '+item.end_time ? false:true">
+                    <ion-label> {{item.start_time}} - {{item.end_time}} </ion-label>
+                  </ion-chip>
+                </ion-col>
+              </ion-row>
+            </ion-card>
+          </div>
+        </div>
+      </div>
+    </swiper-slide>
+    <swiper-slide>
+      <div class="delivery_address">
+        <ion-button (click)="addNew()" expand="block" fill="clear">
+          <ion-icon slot="start" name="add"></ion-icon>
+          {{util.translate('Add Address')}}
+        </ion-button>
+        <div class="noData" *ngIf="addressApiCalled ==true && !myaddress?.length"
+          [style.backgroundImage]="'url(assets/imgs/nothing.png)'">
+        </div>
+        <div *ngIf="addressApiCalled == false">
+          <ion-list lines="none" *ngFor="let item of [1,2,3,4,5]">
+            <ion-item>
+              <ion-thumbnail slot="start">
+                <ion-skeleton-text animated></ion-skeleton-text>
+              </ion-thumbnail>
+              <ion-label>
+                <h3>
+                  <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+                </h3>
+                <p>
+                  <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                </p>
+                <p>
+                  <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                </p>
+              </ion-label>
+            </ion-item>
+          </ion-list>
+        </div>
+        <ion-list lines="none">
+          <ion-radio-group [(ngModel)]="selectedAddress">
+            <ion-item *ngFor="let item of myaddress" class="list">
+              <ion-label class="title">{{item.title}} <br>
+                <span class="name">{{item.house}} {{item.landmark}} {{item.address}}</span>
+              </ion-label>
+              <ion-radio [value]="item.id" slot="start" mode="md"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+        </ion-list>
+      </div>
+    </swiper-slide>
+    <swiper-slide>
+      <div class="payment_info">
+        <ion-card class="promo-code">
+          <ion-item lines="none" (click)="openOffers()">
+            <ion-icon name="ticket" slot="start" color="primary"></ion-icon>
+            <ion-label color="primary">{{util.translate("Have Promocode?")}} </ion-label>
+          </ion-item>
+          <ion-item lines="none" (click)="removeOffers()" *ngIf="cart && cart.coupon && cart.coupon.name">
+            <ion-icon name="ticket" slot="start" color="danger"></ion-icon>
+            <ion-label color="danger">{{util.translate("Coupon Applied")}} </ion-label>
+            <ion-icon name="trash" slot="end" color="danger"></ion-icon>
+          </ion-item>
+        </ion-card>
+        <ion-item lines="none">
+          <ion-label>
+            <h2>{{util.appName}} {{util.translate('Wallet Balance')}} </h2>
+            <p>{{util.translate('Available Balance')}}
+              <span *ngIf="util.cside == 'left'"> {{util.currecny}} {{balance}} </span>
+              <span *ngIf="util.cside == 'right'"> {{balance}} {{util.currecny}} </span>
+            </p>
+          </ion-label>
+          <ion-checkbox slot="end" [disabled]="balance <= 0 || cart.coupon" [(ngModel)]="walletCheck"
+            [checked]="walletCheck" (ionChange)="walletChange($event)">
+          </ion-checkbox>
+        </ion-item>
+
+        <div class="billing">
+          <div class="singleRow">
+            <ion-label class="headerTitle"> {{util.translate('Item Total')}} </ion-label>
+            <ion-label class="price">
+              <span *ngIf="util.cside == 'left'"> {{util.currecny}} {{cart.totalPrice}}</span>
+              <span *ngIf="util.cside == 'right'">{{cart.totalPrice}} {{util.currecny}} </span>
+            </ion-label>
+          </div>
+
+
+
+          <div class="singleRow">
+            <ion-label class="headerTitle"> {{util.translate('Taxes & Charges')}} </ion-label>
+            <ion-label class="price">
+              <span *ngIf="util.cside == 'left'"> {{util.currecny}} {{cart.serviceTax}}</span>
+              <span *ngIf="util.cside == 'right'">{{cart.serviceTax}} {{util.currecny}} </span>
+            </ion-label>
+          </div>
+
+          <div class="singleRow">
+            <ion-label class="headerTitle"> {{util.translate('Delivery Charges')}} </ion-label>
+            <ion-label class="price">
+              <span *ngIf="util.cside == 'left'"> {{util.currecny}} {{cart.deliveryPrice}}</span>
+              <span *ngIf="util.cside == 'right'">{{cart.deliveryPrice}} {{util.currecny}} </span>
+            </ion-label>
+          </div>
+
+          <div class="singleRow" *ngIf="cart.coupon" style="color:red !important">
+            <ion-label class="headerTitle"> {{util.translate('Discount')}} </ion-label>
+            <ion-label class="price">
+              <span *ngIf="util.cside == 'left'"> - {{util.currecny}} {{cart.discount}}</span>
+              <span *ngIf="util.cside == 'right'"> - {{cart.discount}} {{util.currecny}} </span>
+            </ion-label>
+          </div>
+
+          <div class="singleRow" *ngIf="cart.walletDiscount >0" style="color:red !important">
+            <ion-label class="headerTitle"> {{util.appName}} {{util.translate('Wallet Balance')}} </ion-label>
+            <ion-label class="price">
+              <span *ngIf="util.cside == 'left'"> - {{util.currecny}} {{cart.walletDiscount}}</span>
+              <span *ngIf="util.cside == 'right'"> - {{cart.walletDiscount}} {{util.currecny}} </span>
+            </ion-label>
+          </div>
+
+          <div class="singleRow">
+            <ion-label class="headerTotal boldClass"> {{util.translate('Grand Total')}} </ion-label>
+            <ion-label class="priceTotal boldClass">
+
+              <span *ngIf="util.cside == 'left'"> {{util.currecny}} {{cart.grandTotal}}</span>
+              <span *ngIf="util.cside == 'right'">{{cart.grandTotal}} {{util.currecny}} </span>
+            </ion-label>
+          </div>
+
+        </div>
+
+        <div class="header">
+          <ion-label class="title"> {{util.translate('Payment with')}} </ion-label>
+        </div>
+
+        <ion-card class="promo-code">
+          <ion-radio-group [(ngModel)]="pay_method" (ionChange)="paymentChange()" mode="md">
+            <ion-item *ngFor="let item of payments">
+              <ion-thumbnail slot="start">
+                <img [src]="api.mediaURL+item.cover" [alt]="item.name">
+              </ion-thumbnail>
+              <ion-label>{{item.name}}</ion-label>
+              <ion-radio [value]="item.id" mode="md" slot="end"></ion-radio>
+            </ion-item>
+          </ion-radio-group>
+
+        </ion-card>
+
+        <ion-card class="promo-code" *ngIf="paymentAPICalled == false">
+          <ion-item *ngFor="let item of [1,2,3,4,5,6]">
+            <ion-thumbnail slot="start">
+              <ion-skeleton-text></ion-skeleton-text>
+            </ion-thumbnail>
+            <ion-label>
+              <h3>
+                <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+              </h3>
+              <p>
+                <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+              </p>
+              <p>
+                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+              </p>
+            </ion-label>
+          </ion-item>
+        </ion-card>
+        <div style="height:50px;"></div>
+      </div>
+    </swiper-slide>
+  </swiper-container>
+</ion-content>
+
+<ion-footer>
+  <div class="btm" *ngIf="current == 1">
+    <p class="bottomText" *ngIf="deliveryOption ==  'store'"> <span class="bolder">{{util.translate('Note')}} : </span>
+      {{util.translate(getText())}}
+    </p>
+    <div (click)="payment()" class="btmbar">
+      <ion-label>{{cart.cart.length}} {{util.translate('Items')}}:
+        <span *ngIf="util.cside == 'left'"> {{util.currecny}} {{cart.totalPrice}}</span>
+        <span *ngIf="util.cside == 'right'">{{cart.totalPrice}} {{util.currecny}} </span>
+      </ion-label>
+      <ion-label>{{util.translate('Payment')}}
+        <ion-icon name="exit-outline"></ion-icon>
+      </ion-label>
+    </div>
+  </div>
+
+  <div class="btm" *ngIf="current == 2">
+    <div (click)="selectAddress()" class="btmbar">
+      <ion-label>{{cart.cart.length}} {{util.translate('Items')}}:
+        <span *ngIf="util.cside == 'left'"> {{util.currecny}} {{cart.totalPrice}}</span>
+        <span *ngIf="util.cside == 'right'">{{cart.totalPrice}} {{util.currecny}} </span>
+      </ion-label>
+      <ion-label>{{util.translate('Payment')}}
+        <ion-icon name="exit-outline"></ion-icon>
+      </ion-label>
+    </div>
+  </div>
+
+  <div class="btm" *ngIf="current == 3">
+    <ion-button expand="block" mode="ios" (click)="goToTrack()">
+      {{util.translate('Pay Now')}}
+      <span *ngIf="util.cside == 'left'"> &nbsp; {{util.currecny}} {{cart.grandTotal}} &nbsp;</span>
+      <span *ngIf="util.cside =='right'"> &nbsp; {{cart.grandTotal}} {{util.currecny}} &nbsp; </span>
+      <span *ngIf="payName">
+        {{util.translate('with')}} {{payName}}
+      </span>
+    </ion-button>
+  </div>
+</ion-footer>

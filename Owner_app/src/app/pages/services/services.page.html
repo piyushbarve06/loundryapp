@@ -1,0 +1,83 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()">
+        <ion-icon slot="icon-only" name="arrow-back" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{util.translate("Services")}} </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="addNew()">
+        <ion-icon slot="icon-only" name="add-circle-outline" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-segment [(ngModel)]="cateId" *ngIf="apiCalled == true" mode="md" class="category-segment" [scrollable]="true"
+    (ionChange)="segmentChanged()">
+    <ion-segment-button [value]="item.id" *ngFor="let item of categories">
+      <ion-label> {{item.name}} </ion-label>
+    </ion-segment-button>
+  </ion-segment>
+
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list *ngIf="servicesCalled == false" lines="none">
+    <ion-item *ngFor="let item of [1,2,3,4,5,6,7,8,9,0]">
+      <ion-thumbnail slot="start">
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-thumbnail>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text [animated]="true" style="width: 30%;"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div class="item-list" *ngIf="servicesCalled == true">
+    <ion-card class="item-content" *ngFor="let item of services" mode="ios">
+      <ion-row style="padding: 0px !important;">
+        <ion-col size="3" class="image-content">
+          <div
+            [ngStyle]="{'background-image':'url('+api.mediaURL+item.cover+'),url(assets/imgs/services/washing-clothes.png)'}"
+            class="item-image">
+          </div>
+        </ion-col>
+        <ion-col size="6">
+          <ion-label class="item-name"> {{item.name}} </ion-label>
+          <ion-label class="item-price" *ngIf="item.discount == 0 && util.cside =='left'"> {{util.currecny}}
+            {{item.original_price}} </ion-label>
+          <ion-label class="item-price" *ngIf="item.discount == 0 && util.cside =='right'">{{item.original_price}}
+            {{util.currecny}}</ion-label>
+          <ion-label class="item-price" *ngIf="item.discount != 0">
+            <span class="original" *ngIf="util.cside =='left'"> {{util.currecny}} {{item.original_price}} </span>
+            <span class="sell" *ngIf="util.cside =='left'">{{util.currecny}} {{item.sell_price}} </span>
+            <span class="original" *ngIf="util.cside =='right'"> {{item.original_price}} {{util.currecny}}</span>
+            <span class="sell" *ngIf="util.cside =='right'"> {{item.sell_price}} {{util.currecny}}</span>
+          </ion-label>
+          <ion-label class="item-sub-name"> {{item.sub_cate_name}} </ion-label>
+        </ion-col>
+        <ion-col size="3">
+          <div class="quantity">
+            <ion-icon slot="icon-only" name="create-outline" color="warning" class="icon-size"
+              (click)="editService(item.id)"></ion-icon>
+            <ion-icon slot="icon-only" name="trash-outline" color="danger" class="icon-size"
+              (click)="deleteItem(item.id)"></ion-icon>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  </div>
+
+  <div *ngIf="servicesCalled == true && services?.length == 0" class="no-data">
+    <div [ngStyle]="{'background-image':'url(assets/imgs/no-data.jpg)'}" class="no-data-image"></div>
+    <ion-label class="title">{{util.translate("No Data Found")}} </ion-label>
+  </div>
+</ion-content>

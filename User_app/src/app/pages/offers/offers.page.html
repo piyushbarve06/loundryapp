@@ -1,0 +1,48 @@
+<ion-header mode="ios">
+  <ion-toolbar color="primary">
+    <ion-title> {{util.translate("Find Promocodes")}} </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close()">
+        <ion-icon name="close-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-list *ngIf="apiCalled == false">
+    <ion-item *ngFor="let item of [1,2,3,4,5,6,7]">
+      <ion-thumbnail slot="start">
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-thumbnail>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text [animated]="true" style="width: 30%;"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+
+  </ion-list>
+
+  <ion-card *ngFor="let item of list" (click)="selected(item)" class="promo-code">
+    <ion-item lines="none">
+      <p class="couponDesc">
+        <span class="code"> {{util.translate('Use coupon code')}} {{item.name}} </span> <br>
+        <span class="code">{{util.translate("Minmum Cart Valud Of")}}
+          {{util.currecny}} {{item.min_cart_value}} {{util.translate("and save")}} {{item.discount}} <span
+            *ngIf="item.type == 0" class="code"> {{util.translate("%")}} </span> <span *ngIf="item.type == 1"
+            class="code">{{util.translate("Flat")}} </span></span>
+        <br>
+        <span class="desc"> {{item.short_descriptions}} </span> <br>
+        <span class="desc"> {{util.translate('Valid until')}} {{getTime(item.date_time)}} </span> <br>
+      </p>
+    </ion-item>
+  </ion-card>
+
+</ion-content>

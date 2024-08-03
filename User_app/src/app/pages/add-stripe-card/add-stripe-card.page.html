@@ -1,0 +1,26 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title> {{util.translate('Add New Card')}} </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close('close')">
+        <ion-icon slot="icon-only" name="close-circle" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main_content_div_new_card">
+
+    <ion-input type="email" [placeholder]="util.translate('Email Address')" [(ngModel)]="email"></ion-input>
+    <ion-input type="number" [placeholder]="util.translate('Card Number')" [(ngModel)]="cnumber"></ion-input>
+    <ion-input type="text" [placeholder]="util.translate('Card Holder Name')" [(ngModel)]="cname"></ion-input>
+    <ion-input type="password" [placeholder]="util.translate('CVC')" [(ngModel)]="cvc"></ion-input>
+    <ion-datetime presentation="month-year" [(ngModel)]="date" [min]="minStartDate()" [max]="getMaxDate()">
+    </ion-datetime>
+
+    <ion-button expand="block" class="block_btn" (click)="submit()">
+      {{util.translate('Add Card')}}
+    </ion-button>
+  </div>
+</ion-content>

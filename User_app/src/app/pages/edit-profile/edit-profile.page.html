@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()">
+        <ion-icon slot="icon-only" name="arrow-back" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{util.translate("Edit Profile")}} </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="login-content animated animatedFadeInUp fadeInUp">
+    <div class="user_img"
+      [ngStyle]="{'background-image':'url('+api.mediaURL+cover+'),url(assets/imgs/placeholder.jpeg)'}"
+      (click)="updateProfile()">
+    </div>
+
+    <ion-item lines="none">
+      <ion-icon name="person" slot="start"></ion-icon>
+      <ion-input [placeholder]="util.translate('First Name')" type="text" [(ngModel)]="firstName" [disabled]="isLogin">
+      </ion-input>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-icon name="person" slot="start"></ion-icon>
+      <ion-input [placeholder]="util.translate('Last Name')" type="text" [(ngModel)]="lastName" type="text"
+        [disabled]="isLogin">
+      </ion-input>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-icon name="mail" slot="start"></ion-icon>
+      <ion-input [placeholder]="util.translate('Email Address')" type="email" [(ngModel)]="email" [disabled]="true">
+      </ion-input>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-icon name="mail" slot="start"></ion-icon>
+      <ion-input [placeholder]="util.translate('Mobile Number')" type="email" [(ngModel)]="mobile" [disabled]="true">
+      </ion-input>
+    </ion-item>
+
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button (click)="onUpdate()" expand="block" shape="round" class="login_btn" [disabled]="isLogin">
+      <span *ngIf="!isLogin"> {{util.translate('Update Profile')}}</span>
+      <ion-spinner name="circles" *ngIf="isLogin"></ion-spinner>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()">
+        <ion-icon slot="icon-only" name="arrow-back" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{util.translate("Chats")}} </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="apiCalled == false">
+    <ion-list lines="none" *ngFor="let item of [1,2,3,4,5,6,7,8,9,0]">
+      <ion-item>
+        <ion-avatar slot="start">
+          <ion-skeleton-text animated></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <h3>
+            <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+          </h3>
+          <p>
+            <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+          </p>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <ion-card *ngFor="let item of chatList" mode="ios">
+    <ion-item *ngIf="uid == item.sender_id" class="ion-activatable ripple-parent"
+      (click)="openChat(item.receiver_id,item.receiver_name +' '+ item.receiver_last_name)" detail="" lines="none">
+      <ion-avatar slot="start">
+        <img [src]="api.mediaURL+item.receiver_cover" onError="this.src='assets/imgs/placeholder.jpeg'" />
+      </ion-avatar>
+      <ion-label> {{item.receiver_name +' '+ item.receiver_last_name}} </ion-label>
+      <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+    </ion-item>
+
+    <ion-item *ngIf="uid != item.sender_id" class="ion-activatable ripple-parent"
+      (click)="openChat(item.sender_id,item.sender_first_name +' '+ item.sender_last_name)" detail="" lines="none">
+      <ion-avatar slot="start">
+        <img [src]="api.mediaURL+item.sender_cover" onError="this.src='assets/imgs/placeholder.jpeg'" />
+      </ion-avatar>
+      <ion-label> {{item.sender_first_name +' '+ item.sender_last_name}} </ion-label>
+      <ion-ripple-effect type="unbounded"></ion-ripple-effect>
+    </ion-item>
+  </ion-card>
+
+  <div *ngIf="apiCalled == true && chatList?.length == 0" class="no-data">
+    <div [ngStyle]="{'background-image':'url(assets/imgs/no-data.jpg)'}" class="no-data-image"></div>
+    <ion-label class="title">{{util.translate("No Chat Found")}} </ion-label>
+  </div>
+</ion-content>

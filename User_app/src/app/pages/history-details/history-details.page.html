@@ -1,0 +1,147 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" mode="ios">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()">
+        <ion-icon slot="icon-only" name="arrow-back" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{util.translate('Your Order')}} </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="openHelp()">
+        <ion-icon slot="icon-only" name="help-circle-outline" color="light"></ion-icon>
+      </ion-button>
+      <ion-button (click)="invoice()">
+        <ion-icon slot="icon-only" name="print-outline" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="apiCalled == false" class="loader">
+    <ion-spinner name="circular"></ion-spinner>
+  </div>
+
+  <ion-card class="order-list" *ngIf="apiCalled == true" mode="ios">
+    <ion-item lines="none">
+      <ion-thumbnail slot="start">
+        <img [src]="api.mediaURL+storeCover" onError="this.src='assets/imgs/placeholder.jpeg'" />
+      </ion-thumbnail>
+      <ion-label>
+        <h2 class="store-name">{{storeName}}</h2>
+        <p class="store-address">{{storeAddress}}</p>
+        <p class="order-number">{{util.translate('Your Order No.')}} {{id}} {{util.translate('is')}}
+          {{util.translate(status)}} </p>
+      </ion-label>
+      <ion-icon slot="end" name="information-circle-outline" (click)="presentActionSheet()"></ion-icon>
+    </ion-item>
+    <ion-item lines="none">
+      <ion-label>
+        <h2>{{util.translate('Delivery Address')}} </h2>
+        <p class="deliveryAddress">{{deliveryAddress}}</p>
+      </ion-label>
+    </ion-item>
+    <ion-card-content class="card-content" mode="ios">
+      <div *ngFor="let sub of items" class="item-list">
+        <ion-label><span class="item-name">{{sub.name}} ({{sub.cate_name}}) </span> &nbsp; <span
+            class="item-name">X{{sub.quantity}}</span>
+        </ion-label>
+        <ion-label class="item-price" *ngIf="sub.discount == 0 && util.cside =='left'"> {{util.currecny}}
+          {{sub.original_price}} </ion-label>
+        <ion-label class="item-price" *ngIf="sub.discount == 0 && util.cside =='right'">{{sub.original_price}}
+          {{util.currecny}}</ion-label>
+        <ion-label class="item-price" *ngIf="sub.discount != 0">
+          <span class="original" *ngIf="util.cside =='left'"> {{util.currecny}} {{sub.original_price}} </span>
+          <span class="sell" *ngIf="util.cside =='left'">{{util.currecny}} {{sub.sell_price}} </span>
+          <span class="original" *ngIf="util.cside =='right'"> {{sub.original_price}} {{util.currecny}}</span>
+          <span class="sell" *ngIf="util.cside =='right'"> {{sub.sell_price}} {{util.currecny}}</span>
+        </ion-label>
+      </div>
+      <div class="dates-name">
+        <ion-label class="title">{{util.translate('Pick up Date & Time')}} </ion-label>
+        <ion-label class="date-time"> {{pickupDateTime}} </ion-label>
+      </div>
+
+      <div class="dates-name">
+        <ion-label class="title">{{util.translate('Delivery Date & Time')}} </ion-label>
+        <ion-label class="date-time"> {{deliveryDateTime}} </ion-label>
+      </div>
+
+      <br>
+
+      <div class="item-total-list">
+        <ion-label class="title">{{util.translate('Payment')}} </ion-label>
+        <ion-label class="item-price"> {{paid}} </ion-label>
+      </div>
+
+      <div class="item-total-list">
+        <ion-label class="title">{{util.translate('Sub Total')}} </ion-label>
+        <ion-label class="item-price" *ngIf="util.cside =='left'"> {{util.currecny}} {{totalPrice}} </ion-label>
+        <ion-label class="item-price" *ngIf="util.cside =='right'">{{totalPrice}} {{util.currecny}}</ion-label>
+      </div>
+
+      <div class="item-total-list">
+        <ion-label class="title">{{util.translate('Delivery Cost')}} </ion-label>
+        <ion-label class="item-price" *ngIf="util.cside =='left'"> {{util.currecny}} {{deliveryCost}} </ion-label>
+        <ion-label class="item-price" *ngIf="util.cside =='right'">{{deliveryCost}} {{util.currecny}}</ion-label>
+      </div>
+
+      <div class="item-total-list">
+        <ion-label class="title">{{util.translate('Service Tax')}} </ion-label>
+        <ion-label class="item-price" *ngIf="util.cside =='left'"> {{util.currecny}} {{serviceTax}} </ion-label>
+        <ion-label class="item-price" *ngIf="util.cside =='right'">{{serviceTax}} {{util.currecny}}</ion-label>
+      </div>
+
+      <div class="item-total-list-discount">
+        <ion-label class="title">{{util.translate('Discount')}} </ion-label>
+        <ion-label class="item-price" *ngIf="util.cside =='left'"> - {{util.currecny}} {{discount}} </ion-label>
+        <ion-label class="item-price" *ngIf="util.cside =='right'"> - {{discount}} {{util.currecny}}</ion-label>
+      </div>
+
+      <div class="item-total-list-discount">
+        <ion-label class="title">{{util.translate('Wallet Discount')}} </ion-label>
+        <ion-label class="item-price" *ngIf="util.cside =='left'"> - {{util.currecny}} {{walletPrice}} </ion-label>
+        <ion-label class="item-price" *ngIf="util.cside =='right'"> - {{walletPrice}} {{util.currecny}}</ion-label>
+      </div>
+
+      <br>
+      <div class="grand-total">
+        <ion-label class="title">{{util.translate('Grand Total')}} </ion-label>
+        <ion-label class="item-price" *ngIf="util.cside =='left'"> {{util.currecny}} {{grandTotal}} </ion-label>
+        <ion-label class="item-price" *ngIf="util.cside =='right'">{{grandTotal}} {{util.currecny}}</ion-label>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="haveDriver == true" class="order-list" mode="ios">
+    <ion-label class="title-info">{{util.translate('Driver Info')}} </ion-label>
+    <ion-item lines="none">
+      <ion-thumbnail slot="start">
+        <img [src]="api.mediaURL+driverCover" onError="this.src='assets/imgs/placeholder.jpeg'" />
+      </ion-thumbnail>
+      <ion-label>
+        <h2 class="store-name">{{driverName}}</h2>
+        <p class="order-number"> {{driverMobile}} </p>
+      </ion-label>
+      <ion-icon slot="end" name="information-circle-outline" (click)="presentDriverActionSheet()"></ion-icon>
+    </ion-item>
+  </ion-card>
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <div class="btn_div">
+      <ion-label *ngIf="isDelivered == false && canCancle == false"> {{util.translate('Your Order is')}}
+        {{util.translate(status)}}
+      </ion-label>
+      <ion-button *ngIf="isDelivered" (click)="presentAlertConfirm()" class="ratae" color="warning">
+        <ion-icon name="star" color="dark" slot="start"></ion-icon>
+        {{util.translate('Rate Order')}}
+      </ion-button>
+      <ion-button *ngIf="canCancle" (click)="changeStatus()" class="reject" color="danger">
+        {{util.translate('Cancel Order')}}
+      </ion-button>
+    </div>
+  </ion-toolbar>
+</ion-footer>

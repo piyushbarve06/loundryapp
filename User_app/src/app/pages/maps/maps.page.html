@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="util.openMenu()">
+        <ion-icon slot="end" name="menu-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title> {{util.translate("Laundries Near You")}} </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="loader">
+    <ion-spinner name="crescent" *ngIf="apiCalled == false" color="primary"></ion-spinner>
+  </div>
+  <div class="main_content_div" *ngIf="apiCalled == true && list.length > 0">
+    <div #map id="map" class="map"></div>
+
+    <div class="div1" id='item'>
+      <div class="cateLbl">
+        <ion-label class="all">{{util.translate("Most Popular")}} </ion-label>
+        <ion-label class="view">{{util.translate("Near By You")}} </ion-label>
+      </div>
+
+      <div class="slider_div">
+        <swiper-container slides-per-view="1.2" speed="500" loop="false" css-mode="true" space-between="10">
+          <swiper-slide *ngFor="let item of list;let i = index;">
+            <div class="card">
+              <div class="back_image"
+                [ngStyle]="{'background-image':'url('+api.mediaURL+item.cover+'),url(assets/imgs/placeholder.jpeg)'}">
+                <ion-label class="time_lbl">
+                  <ion-icon name="star" color="warning"></ion-icon>
+                  {{item.rating}}
+                </ion-label>
+                <ion-icon slot="icon-only" (click)="addLike(i)" class="fav-icon"
+                  [name]=" item.liked == true ? 'heart': 'heart-outline'" color="primary">
+                </ion-icon>
+              </div>
+              <div class="salon_detail_div">
+                <ion-label class="heading_lbl">{{item.name}}</ion-label>
+                <ion-label class="addr">{{ (item.address.length>25)? (item.address |
+                  slice:0:25)+'..':(item.address) }}</ion-label>
+                <ion-label class="addr">
+                  <span *ngFor="let cate of item.web_cates_data;let cateIndex = index">
+                    <span> {{cate.name}}
+                      <span *ngIf="cateIndex !=item.web_cates_data.length - 1">,</span>
+                    </span>
+                  </span>
+                </ion-label>
+                <ion-label class="book_class" (click)="getService(item.uid)"> {{util.translate("View Details")}}
+                </ion-label>
+              </div>
+            </div>
+          </swiper-slide>
+        </swiper-container>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="apiCalled == true && list?.length == 0" class="no-data">
+    <div [ngStyle]="{'background-image':'url(assets/imgs/no-data.jpg)'}" class="no-data-image"></div>
+    <ion-label class="title">{{util.translate("No Data Found Near")}} {{addressTitle}} </ion-label>
+  </div>
+</ion-content>

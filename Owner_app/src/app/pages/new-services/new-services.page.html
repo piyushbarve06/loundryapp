@@ -1,0 +1,74 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()">
+        <ion-icon slot="icon-only" name="arrow-back" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{util.translate('Add New Services')}} </ion-title>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="mainContent">
+    <ion-list lines="none">
+      <div class="coverPlaceholder" (click)="cover()" *ngIf="!coverImage || coverImage ==''"
+        [ngStyle]="{'border-color': submited == true && coverImage =='' ? 'red':''}">
+        <ion-icon name="cloud-upload-outline" color="primary"></ion-icon>
+        <p> {{util.translate('Upload service cover image here')}} </p>
+      </div>
+
+      <div class="coverReal" (click)="cover()" [style.backgroundImage]="'url('+api.mediaURL+ coverImage+')'"
+        *ngIf="coverImage && coverImage !=''">
+      </div>
+
+      <ion-item (click)="openCate()" [ngStyle]="{'border-color': submited == true && cateId =='' ? 'red':''}">
+        <ion-label class="title">{{util.translate('Category')}} <br>
+          <span class="name" *ngIf="!cateName"> {{util.translate('Select Category')}} </span>
+          <span class="name" *ngIf="cateName">{{cateName}}</span>
+        </ion-label>
+      </ion-item>
+
+      <ion-item (click)="openSub()" [ngStyle]="{'border-color': submited == true && subId =='' ? 'red':''}">
+        <ion-label class="title"> {{util.translate('Sub Categories')}} <br>
+          <span class="name" *ngIf="!subName"> {{util.translate('Select Sub Category')}} </span>
+          <span class="name" *ngIf="subName">{{subName}}</span>
+        </ion-label>
+      </ion-item>
+
+      <ion-item [ngStyle]="{'border-color': submited == true && name =='' ? 'red':''}">
+        <ion-label position="floating"> {{util.translate('Service name')}} </ion-label>
+        <ion-input [(ngModel)]="name" type="text" [placeholder]="util.translate('Service name')"></ion-input>
+      </ion-item>
+
+      <ion-item [ngStyle]="{'border-color': submited == true && realPrice =='' ? 'red':''}">
+        <ion-label position="floating"> {{util.translate('Service price')}} </ion-label>
+        <ion-input [(ngModel)]="realPrice" type="number" (ionChange)="onRealPrice($event)"
+          [placeholder]="util.translate('Service price')"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="floating"> {{util.translate('Discount % Optional')}} </ion-label>
+        <ion-input [(ngModel)]="discount" (ionChange)="onDicount($event)" type="number"
+          [placeholder]="util.translate('Discount % Optional')"></ion-input>
+      </ion-item>
+
+      <ion-item *ngIf="discount !='' && discount > 0 ">
+        <ion-label position="floating"> {{util.translate('Discounted Price')}} </ion-label>
+        <ion-input [(ngModel)]="sellPrice" disabled="true" type="number"
+          [placeholder]="util.translate('Discounted Price')">
+        </ion-input>
+      </ion-item>
+
+    </ion-list>
+
+    <ion-button (click)="submit()" expand="block" shape="round" *ngIf="isNew == true">
+      {{util.translate('Submit')}}
+    </ion-button>
+
+    <ion-button (click)="updateService()" expand="block" shape="round" *ngIf="isNew == false">
+      {{util.translate('Update')}}
+    </ion-button>
+  </div>
+</ion-content>

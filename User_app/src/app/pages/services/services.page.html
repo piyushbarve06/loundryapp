@@ -1,0 +1,53 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()">
+        <ion-icon slot="icon-only" name="arrow-back" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <ion-label class="page-title" *ngIf="apiCalled == true && list.length > 0"> {{util.translate("Services")}}
+  </ion-label>
+  <ion-label class="page-sub-title" *ngIf="apiCalled == true && list.length > 0">
+    {{util.translate("Choose the type of service.")}}
+  </ion-label>
+
+  <ion-list *ngIf="apiCalled == false">
+    <ion-item *ngFor="let item of [1,2,3,4,5,6,7]">
+      <ion-thumbnail slot="start">
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-thumbnail>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text [animated]="true" style="width: 30%;"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-card class="service-card" *ngFor="let item of list" mode="ios" (click)="onCategories(item.id)">
+    <ion-item lines="none">
+      <ion-thumbnail slot="start">
+        <img [alt]="item.name" [src]="api.mediaURL+item.cover" onError="this.src='assets/imgs/placeholder.jpeg'" />
+      </ion-thumbnail>
+      <ion-label>
+        <h3 class="service-name"> {{item.name}} </h3>
+        <p class="service-details"> {{item.descriptions}} </p>
+      </ion-label>
+    </ion-item>
+  </ion-card>
+
+  <div *ngIf="apiCalled == true && list?.length == 0" class="no-data">
+    <div [ngStyle]="{'background-image':'url(assets/imgs/no-data.jpg)'}" class="no-data-image"></div>
+    <ion-label class="title">{{util.translate("No Data Found")}} </ion-label>
+  </div>
+</ion-content>

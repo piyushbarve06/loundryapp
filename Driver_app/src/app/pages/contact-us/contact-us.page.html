@@ -1,0 +1,81 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()">
+        <ion-icon slot="icon-only" name="arrow-back" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title> {{util.translate('Contact Us')}} </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="contact-div">
+    <div class="main_content_div">
+
+      <div class="form_div">
+
+        <div class="flex_ip">
+          <ion-icon name="person-outline"></ion-icon>
+          <div style="width: 16px;"></div>
+          <ion-input type="text" [placeholder]="util.translate('Full Name')" [(ngModel)]="contact.name"></ion-input>
+        </div>
+
+        <div class="flex_ip">
+          <ion-icon name="mail-outline"></ion-icon>
+          <div style="width: 16px;"></div>
+          <ion-input type="text" [placeholder]="util.translate('Email')" [(ngModel)]="contact.email"></ion-input>
+        </div>
+
+        <div class="flex_ip">
+          <ion-icon name="send-outline"></ion-icon>
+          <div style="width: 16px;"></div>
+          <ion-textarea row="8" type="text" [placeholder]="util.translate('Message')" [(ngModel)]="contact.message">
+          </ion-textarea>
+        </div>
+
+        <ion-button (click)="submit()" class="red_btn block_btn" mode="ios">
+          {{util.translate('Submit')}}
+        </ion-button>
+
+      </div>
+
+      <div class="flex_box" *ngIf="util.settingInfo && util.settingInfo.address">
+        <div>
+          <ion-icon name="home-outline"></ion-icon>
+        </div>
+        <label> {{util.settingInfo.address}}</label>
+      </div>
+
+      <div class="flex_box" *ngIf="util.settingInfo && util.settingInfo.address">
+        <div>
+          <ion-icon name="home-outline"></ion-icon>
+        </div>
+        <label> {{util.settingInfo.city}} - {{util.settingInfo.country}} - {{util.settingInfo.zip}}</label>
+      </div>
+
+      <div class="flex_box" *ngIf="util.settingInfo && util.settingInfo.address">
+        <div>
+          <ion-icon name="mail-open-outline"></ion-icon>
+        </div>
+        <label> {{util.settingInfo.email}} </label>
+      </div>
+
+      <div class="flex_box" *ngIf="util.settingInfo && util.settingInfo.address">
+        <div>
+          <ion-icon name="call-outline"></ion-icon>
+        </div>
+        <label> {{util.settingInfo.mobile}} </label>
+      </div>
+
+      <div class="flex_box" *ngIf="util.settingInfo && util.settingInfo.address">
+        <div>
+          <ion-icon name="print-outline"></ion-icon>
+        </div>
+        <label for=""> {{util.settingInfo.email}} </label>
+      </div>
+
+    </div>
+    <div #map id="map"></div>
+  </div>
+</ion-content>

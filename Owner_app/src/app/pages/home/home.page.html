@@ -1,0 +1,163 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title> {{util.translate('Your Orders')}} </ion-title>
+  </ion-toolbar>
+  <ion-segment [(ngModel)]="currentId" (ionChange)="segmentChanged($event)" mode="md" class="category-segment">
+    <ion-segment-button value="new">
+      <ion-label>{{util.translate('New Orders')}} </ion-label>
+    </ion-segment-button>
+    <ion-segment-button value="old">
+      <ion-label>{{util.translate('Past Orders')}} </ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="currentId == 'new'">
+    <ion-refresher slot="fixed" pullFactor="0.5" pullMin="100" pullMax="200" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-card *ngFor="let item of newOrders" class="order-list" (click)="openDetails(item.id)" mode="ios">
+      <ion-item lines="none">
+        <ion-thumbnail slot="start">
+          <img [src]="api.mediaURL+item.user_cover" onError="this.src='assets/imgs/placeholder.jpeg'" />
+        </ion-thumbnail>
+        <ion-label>
+          <h2 class="store-name">{{item.first_name}} {{item.last_name}} </h2>
+          <p class="store-address">{{item.store_address}}</p>
+          <p class="order-number">{{util.translate('Your Order No.')}} {{item.id}} {{util.translate('is')}}
+            {{util.translate(statusName[item.status])}} </p>
+        </ion-label>
+      </ion-item>
+      <ion-card-content class="card-content">
+        <div *ngFor="let sub of item.items" class="item-list">
+          <ion-label><span class="item-name">{{sub.name}} ({{sub.cate_name}}) </span> &nbsp; <span
+              class="item-name">X{{sub.quantity}}</span>
+          </ion-label>
+          <ion-label class="item-price" *ngIf="sub.discount == 0 && util.cside =='left'"> {{util.currecny}}
+            {{sub.original_price}} </ion-label>
+          <ion-label class="item-price" *ngIf="sub.discount == 0 && util.cside =='right'">{{sub.original_price}}
+            {{util.currecny}}</ion-label>
+          <ion-label class="item-price" *ngIf="sub.discount != 0">
+            <span class="original" *ngIf="util.cside =='left'"> {{util.currecny}} {{sub.original_price}} </span>
+            <span class="sell" *ngIf="util.cside =='left'">{{util.currecny}} {{sub.sell_price}} </span>
+            <span class="original" *ngIf="util.cside =='right'"> {{sub.original_price}} {{util.currecny}}</span>
+            <span class="sell" *ngIf="util.cside =='right'"> {{sub.sell_price}} {{util.currecny}}</span>
+          </ion-label>
+        </div>
+        <div class="dates-name">
+          <ion-label class="title">{{util.translate('Pick up Date & Time')}} </ion-label>
+          <ion-label class="date-time"> {{item.pickup_date}} | {{item.pickup_slot}} </ion-label>
+        </div>
+
+        <div class="dates-name">
+          <ion-label class="title">{{util.translate('Delivery Date & Time')}} </ion-label>
+          <ion-label class="date-time"> {{item.delivery_date}} | {{item.delivery_slot}} </ion-label>
+        </div>
+
+        <br>
+        <div class="grand-total">
+          <ion-label class="title">{{util.translate('Grand Total')}} </ion-label>
+          <ion-label class="item-price" *ngIf="util.cside =='left'"> {{util.currecny}} {{item.grand_total}} </ion-label>
+          <ion-label class="item-price" *ngIf="util.cside =='right'">{{item.grand_total}} {{util.currecny}}</ion-label>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-item *ngFor="let item of dummy">
+      <ion-thumbnail slot="start">
+        <ion-skeleton-text animated style="width: 100%;height: 100px;"></ion-skeleton-text>
+      </ion-thumbnail>
+      <ion-label>
+        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+      </ion-label>
+    </ion-item>
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="doRefresh($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" [loadingText]="util.translate('Loading more data...')">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+    <div *ngIf="dummy.length == 0 && newOrders?.length == 0" class="no-data">
+      <div [ngStyle]="{'background-image':'url(assets/imgs/no-data.jpg)'}" class="no-data-image"></div>
+      <ion-label class="title">{{util.translate('No New Order Found')}} </ion-label>
+    </div>
+  </div>
+
+  <div *ngIf="currentId == 'old'">
+    <ion-refresher slot="fixed" pullFactor="0.5" pullMin="100" pullMax="200" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-card *ngFor="let item of oldOrders" class="order-list" (click)="openDetails(item.id)" mode="ios">
+      <ion-item lines="none">
+        <ion-thumbnail slot="start">
+          <img [src]="api.mediaURL+item.user_cover" onError="this.src='assets/imgs/placeholder.jpeg'" />
+        </ion-thumbnail>
+        <ion-label>
+          <h2 class="store-name">{{item.first_name}} {{item.last_name}} </h2>
+          <p class="store-address">{{item.store_address}}</p>
+          <p class="order-number">{{util.translate('Your Order No.')}} {{item.id}} {{util.translate('is')}}
+            {{util.translate(statusName[item.status])}} </p>
+        </ion-label>
+      </ion-item>
+      <ion-card-content class="card-content">
+        <div *ngFor="let sub of item.items" class="item-list">
+          <ion-label><span class="item-name">{{sub.name}} ({{sub.cate_name}}) </span> &nbsp; <span
+              class="item-name">X{{sub.quantity}}</span>
+          </ion-label>
+          <ion-label class="item-price" *ngIf="sub.discount == 0 && util.cside =='left'"> {{util.currecny}}
+            {{sub.original_price}} </ion-label>
+          <ion-label class="item-price" *ngIf="sub.discount == 0 && util.cside =='right'">{{sub.original_price}}
+            {{util.currecny}}</ion-label>
+          <ion-label class="item-price" *ngIf="sub.discount != 0">
+            <span class="original" *ngIf="util.cside =='left'"> {{util.currecny}} {{sub.original_price}} </span>
+            <span class="sell" *ngIf="util.cside =='left'">{{util.currecny}} {{sub.sell_price}} </span>
+            <span class="original" *ngIf="util.cside =='right'"> {{sub.original_price}} {{util.currecny}}</span>
+            <span class="sell" *ngIf="util.cside =='right'"> {{sub.sell_price}} {{util.currecny}}</span>
+          </ion-label>
+        </div>
+        <div class="dates-name">
+          <ion-label class="title">{{util.translate('Pick up Date & Time')}} </ion-label>
+          <ion-label class="date-time"> {{item.pickup_date}} | {{item.pickup_slot}} </ion-label>
+        </div>
+
+        <div class="dates-name">
+          <ion-label class="title">{{util.translate('Delivery Date & Time')}} </ion-label>
+          <ion-label class="date-time"> {{item.delivery_date}} | {{item.delivery_slot}} </ion-label>
+        </div>
+
+        <br>
+        <div class="grand-total">
+          <ion-label class="title">{{util.translate('Grand Total')}} </ion-label>
+          <ion-label class="item-price" *ngIf="util.cside =='left'"> {{util.currecny}} {{item.grand_total}} </ion-label>
+          <ion-label class="item-price" *ngIf="util.cside =='right'">{{item.grand_total}} {{util.currecny}}</ion-label>
+        </div>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-item *ngFor="let item of dummy">
+      <ion-thumbnail slot="start">
+        <ion-skeleton-text animated style="width: 100%;height: 100px;"></ion-skeleton-text>
+      </ion-thumbnail>
+      <ion-label>
+        <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+      </ion-label>
+    </ion-item>
+
+    <ion-infinite-scroll threshold="100px" (ionInfinite)="doRefresh($event)">
+      <ion-infinite-scroll-content loadingSpinner="bubbles" [loadingText]="util.translate('Loading more data...')">
+      </ion-infinite-scroll-content>
+    </ion-infinite-scroll>
+
+    <div *ngIf="dummy.length == 0 && oldOrders?.length == 0" class="no-data">
+      <div [ngStyle]="{'background-image':'url(assets/imgs/no-data.jpg)'}" class="no-data-image"></div>
+      <ion-label class="title"> {{util.translate('No Old Order Found')}} </ion-label>
+    </div>
+  </div>
+</ion-content>

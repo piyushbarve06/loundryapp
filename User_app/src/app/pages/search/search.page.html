@@ -1,0 +1,57 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-title> {{util.translate("Search")}} </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onClose()">
+        <ion-icon name="close-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-searchbar [placeholder]="util.translate('Search laundries..')" mode="ios" inputmode="text" type="text"
+    [debounce]="250" (ionChange)="onSearchChange($event)" showCancelButton="always"></ion-searchbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="store-list">
+    <div class="store-info" *ngFor="let item of list;let i = index">
+      <ion-row style="padding: 0px !important;">
+        <ion-col size="3" class="image-content">
+          <div [ngStyle]="{'background-image':'url('+api.mediaURL+item.cover+'),url(assets/imgs/placeholder.jpeg)'}"
+            class="store-image"></div>
+        </ion-col>
+        <ion-col size="9">
+          <div class="info-section">
+            <div class="name-section">
+              <ion-label class="store-name"> {{item.name}} </ion-label>
+              <ion-icon slot="icon-only" (click)="addLike(i)" class="fav-icon"
+                [name]=" item.liked == true ? 'heart': 'heart-outline'" color="primary">
+              </ion-icon>
+            </div>
+            <div class="address-section">
+              <div class="info">
+                <ion-icon slot="start" name="location-outline" class="address-icon"></ion-icon> &nbsp;
+                <ion-label class="address-name">{{ (item.address.length>25)? (item.address |
+                  slice:0:25)+'..':(item.address) }}</ion-label>
+              </div>
+              <div class="info">
+                <ion-label class="address-name">{{item.distance}} <span
+                    style="text-transform: uppercase;">{{distanceType}}</span> </ion-label> &nbsp;
+                <ion-icon slot="start" name="navigate" class="address-icon"></ion-icon>
+              </div>
+            </div>
+            <ion-label class="services-name">
+              <span *ngFor="let cate of item.web_cates_data;let cateIndex = index">
+                <span> {{cate.name}}
+                  <span *ngIf="cateIndex !=item.web_cates_data.length - 1">,</span>
+                </span>
+              </span>
+            </ion-label>
+            <ion-button size="small" expand="block" class="navigate-button" (click)="getService(item.uid)">
+              {{util.translate("View Details")}}
+            </ion-button>
+          </div>
+        </ion-col>
+      </ion-row>
+    </div>
+  </div>
+</ion-content>

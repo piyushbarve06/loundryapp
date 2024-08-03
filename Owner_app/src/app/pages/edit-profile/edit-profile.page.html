@@ -1,0 +1,74 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()">
+        <ion-icon slot="icon-only" name="arrow-back" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title> {{util.translate('Edit Profile')}} </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <div class="login-content animated animatedFadeInUp fadeInUp">
+    <div class="user_img"
+      [ngStyle]="{'background-image':'url('+api.mediaURL+cover+'),url(assets/imgs/placeholder.jpeg)'}"
+      (click)="updateProfile()">
+    </div>
+
+    <ion-item lines="none">
+      <ion-icon name="person" slot="start"></ion-icon>
+      <ion-input [placeholder]="util.translate('Store Name')" type="text" [(ngModel)]="name" [disabled]="isLogin">
+      </ion-input>
+    </ion-item>
+
+    <ion-item lines="none" detail="" (click)="openCategories()">
+      <ion-label>
+        <h2> {{util.translate('Categories')}} </h2>
+        <p *ngFor="let item of categories">{{item.name}}</p>
+      </ion-label>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-icon name="person" slot="start"></ion-icon>
+      <ion-input [placeholder]="util.translate('First Name')" type="text" [(ngModel)]="firstName" [disabled]="isLogin">
+      </ion-input>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-icon name="person" slot="start"></ion-icon>
+      <ion-input [placeholder]="util.translate('Last Name')" type="text" [(ngModel)]="lastName" type="text"
+        [disabled]="isLogin">
+      </ion-input>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-icon name="mail" slot="start"></ion-icon>
+      <ion-input [placeholder]="util.translate('Email Address')" type="email" [(ngModel)]="email" [disabled]="true">
+      </ion-input>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-label position="stacked">{{util.translate('Address')}} </ion-label>
+      <ion-textarea rows="4" [placeholder]="util.translate('Enter your address')" [(ngModel)]="address"></ion-textarea>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-icon name="navigate-circle" slot="start"></ion-icon>
+      <ion-input [placeholder]="util.translate('Zipcode')" type="text" [(ngModel)]="zipcode"></ion-input>
+    </ion-item>
+
+    <ion-item lines="none">
+      <ion-label position="stacked">{{util.translate('Short Descriptions')}}</ion-label>
+      <ion-textarea rows="4" [placeholder]="util.translate('Short Descriptions')" [(ngModel)]="about"></ion-textarea>
+    </ion-item>
+  </div>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button (click)="onUpdate()" expand="block" shape="round" class="login_btn" [disabled]="isLogin">
+      <span *ngIf="!isLogin"> {{util.translate('Update Profile')}}</span>
+      <ion-spinner name="circles" *ngIf="isLogin"></ion-spinner>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

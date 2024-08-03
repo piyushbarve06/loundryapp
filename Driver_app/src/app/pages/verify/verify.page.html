@@ -1,0 +1,29 @@
+<ion-header class="ion-no-border" mode="md">
+  <ion-toolbar color="primary">
+    <ion-title>{{util.translate('Verification')}} </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close('false','false')">
+        <ion-icon slot="icon-only" color="light" name="close-circle-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <p> {{util.translate('We have sent verification code on')}} <br> <b> {{to}} </b></p>
+  <div class="otp_content">
+    <ng-otp-input (onInputChange)="onOtpChange($event)"
+      [config]="{length:6,inputStyles:{'width': '40px','height': '40px','border':'1px solid lightgray','background-color':'white'}}">
+    </ng-otp-input>
+  </div>
+
+</ion-content>
+<ion-footer>
+  <ion-toolbar>
+
+    <ion-button (click)="onSubmit()" [disabled]="isLogin">
+      <span *ngIf="!isLogin"> {{util.translate('Verify')}}</span>
+      <ion-spinner name="circles" *ngIf="isLogin"></ion-spinner>
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>

@@ -1,0 +1,107 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary" mode="ios">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()">
+        <ion-icon slot="icon-only" name="arrow-back" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{util.translate("Select Clothes")}} </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="onCart()">
+        <ion-badge color="light" mode="ios"> {{cart.totalItemInCart}} </ion-badge>
+        <ion-icon slot="icon-only" name="cart-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+
+  <ion-segment [(ngModel)]="selectedCateId" mode="md" class="category-segment" (ionChange)="segmentChanged()">
+    <ion-segment-button [value]="item.id" *ngFor="let item of categories">
+      <ion-label>{{item.name}}</ion-label>
+    </ion-segment-button>
+  </ion-segment>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  <ion-list *ngIf="apiCalled == false">
+    <ion-item *ngFor="let item of [1,2,3,4,5,6,7]">
+      <ion-thumbnail slot="start">
+        <ion-skeleton-text [animated]="true"></ion-skeleton-text>
+      </ion-thumbnail>
+      <ion-label>
+        <h3>
+          <ion-skeleton-text [animated]="true" style="width: 80%;"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text [animated]="true" style="width: 60%;"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text [animated]="true" style="width: 30%;"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+  </ion-list>
+
+  <div class="item-list">
+    <ion-card class="item-content" *ngFor="let item of services;let i = index" mode="ios">
+      <ion-row style="padding: 0px !important;">
+        <ion-col size="2" class="image-content">
+          <div [ngStyle]="{'background-image':'url('+api.mediaURL+item.cover+'),url(assets/imgs/placeholder.jpeg)'}"
+            class="item-image">
+          </div>
+        </ion-col>
+        <ion-col size="1"></ion-col>
+        <ion-col size="5">
+          <ion-label class="item-name"> {{item.name}} </ion-label>
+          <ion-label class="item-price" *ngIf="item.discount == 0 && util.cside =='left'"> {{util.currecny}}
+            {{item.original_price}} </ion-label>
+          <ion-label class="item-price" *ngIf="item.discount == 0 && util.cside =='right'">{{item.original_price}}
+            {{util.currecny}}</ion-label>
+          <ion-label class="item-price" *ngIf="item.discount != 0">
+            <span class="original" *ngIf="util.cside =='left'"> {{util.currecny}} {{item.original_price}} </span>
+            <span class="sell" *ngIf="util.cside =='left'">{{util.currecny}} {{item.sell_price}} </span>
+            <span class="original" *ngIf="util.cside =='right'"> {{item.original_price}} {{util.currecny}}</span>
+            <span class="sell" *ngIf="util.cside =='right'"> {{item.sell_price}} {{util.currecny}}</span>
+          </ion-label>
+        </ion-col>
+        <ion-col size="4">
+          <div class="quantity">
+            <div class="ion-activatable quantity-button-remove" (click)="saveCartAction(i,item,'remove')">
+              <ion-icon slot="icon-only" name="remove-circle" color="light"></ion-icon>
+              <ion-ripple-effect type="bounded"></ion-ripple-effect>
+            </div>
+            <ion-label class="quantity-numbers"> {{item.quantity}} </ion-label>
+            <div class="ion-activatable quantity-button-add" (click)="saveCartAction(i,item,'add')">
+              <ion-icon slot="icon-only" name="add-circle" color="light"></ion-icon>
+              <ion-ripple-effect type="bounded"></ion-ripple-effect>
+            </div>
+          </div>
+        </ion-col>
+      </ion-row>
+    </ion-card>
+  </div>
+
+  <div *ngIf="apiCalled == true && services?.length == 0" class="no-data">
+    <div [ngStyle]="{'background-image':'url(assets/imgs/no-data.jpg)'}" class="no-data-image"></div>
+    <ion-label class="title">{{util.translate("No Data Found")}} </ion-label>
+  </div>
+</ion-content>
+
+<ion-footer *ngIf="cart && cart.cart && cart.cart.length > 0">
+  <ion-toolbar color="primary" class="ion-activatable" (click)="onCart()">
+    <div class="checkout-content">
+      <div class="cart-price-content">
+        <ion-label class="item-total">{{cart.totalItemInCart}} {{util.translate("Items")}} </ion-label>
+        <ion-label class="item-price" *ngIf="util.cside =='left'"> {{util.currecny}}
+          {{cart.grandTotal}} </ion-label>
+        <ion-label class="item-price" *ngIf="util.cside =='right'">{{cart.grandTotal}}
+          {{util.currecny}}</ion-label>
+      </div>
+      <div class="cart-checkout">
+        <ion-label class="item-text">{{util.translate("Place Order Now")}} &nbsp;</ion-label>
+        <ion-icon slot="end" name="arrow-forward"></ion-icon>
+      </div>
+    </div>
+    <ion-ripple-effect type="bounded"></ion-ripple-effect>
+  </ion-toolbar>
+</ion-footer>

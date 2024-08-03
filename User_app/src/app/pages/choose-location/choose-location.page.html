@@ -1,0 +1,35 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-button (click)="onBack()">
+        <ion-icon slot="icon-only" name="arrow-back" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{util.translate("Find Location")}} </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content>
+  <ion-searchbar [placeholder]="util.translate('Search location')" (ionChange)="onSearchChange($event)" mode="ios"
+    [(ngModel)]="query">
+  </ion-searchbar>
+
+  <ion-list>
+    <ion-item *ngFor="let item of autocompleteItems1" (click)="selectSearchResult1(item)">
+      {{ item.description }}
+      <ion-ripple-effect type="bounded"></ion-ripple-effect>
+    </ion-item>
+  </ion-list>
+  <ion-button (click)="onLocation()" expand="block" fill="clear" shape="round" color="primary">
+    {{util.translate('Use my current location')}}
+  </ion-button>
+  <ion-spinner *ngIf="isLoading == true" name="crescent" color="primary"></ion-spinner>
+  <p class="ion-text-center"></p>
+  <div #map id="map" class="map"></div>
+  <div style="margin-top: 20px;padding: 30px;" *ngIf="lat && lng">
+    <ion-button (click)="selectedAddress()" expand="block" shape="round" color="primary">
+      {{util.translate('Use This Location')}}
+    </ion-button>
+  </div>
+</ion-content>

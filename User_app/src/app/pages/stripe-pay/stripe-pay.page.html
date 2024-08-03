@@ -1,0 +1,54 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-title>{{util.translate('Pay with Stripe')}}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="close('close','close')">
+        <ion-icon slot="icon-only" name="close-circle" color="light"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="main_content_div_stripe">
+    <div *ngIf="!cards?.length && !dummyCards?.length">
+      <ion-label class="ion-text-center">{{util.translate('No Card Found Please Add Card')}}</ion-label>
+    </div>
+    <ion-item *ngFor="let item of dummyCards">
+      <ion-label>
+        <h3>
+          <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text>
+        </h3>
+        <p>
+          <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+        </p>
+        <p>
+          <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+        </p>
+      </ion-label>
+    </ion-item>
+    <ion-radio-group [(ngModel)]="token">
+      <ion-item class="div_inner" lines="none" *ngFor="let card of cards;let i = index">
+        <ion-thumbnail slot="end"
+          style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+          <ion-label>{{card.brand}} </ion-label>
+        </ion-thumbnail>
+        <ion-radio (ionSelect)="changeMethod(card.id)" [value]="card.id" slot="start"></ion-radio>
+        <ion-label>XXXX{{card.last4}} <br> {{util.translate('Expiry')}} {{card.exp_month}} / {{card.exp_year}}
+        </ion-label>
+      </ion-item>
+    </ion-radio-group>
+    <ion-button expand="block" *ngIf="cards?.length" class="btn_addcard" (click)="payment()">
+      {{util.translate('Payment')}}
+      <span *ngIf="util.cside === 'left'"> &nbsp; {{util.currecny}} {{cart.grandTotal}} &nbsp;</span>
+      <span *ngIf="util.cside === 'right'"> &nbsp; {{cart.grandTotal}} {{util.currecny}} &nbsp; </span>
+
+    </ion-button>
+  </div>
+
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" (click)="addNewCards()">
+    <ion-fab-button>
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
