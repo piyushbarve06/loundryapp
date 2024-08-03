@@ -338,195 +338,204 @@ export class RegisterPage implements OnInit {
     window.open('https://www.mapcoordinates.net/en', '_blank');
   }
 
+  // verifyEmail() {
+  //   if (this.register.email == '') {
+  //     this.util.errorToast('Please enter email address', 'danger');
+  //     return false;
+  //   }
+
+  //   const emailfilter = /^[\w._-]+[+]?[\w._-]+@[\w.-]+\.[a-zA-Z]{2,6}$/;
+  //   if (!emailfilter.test(this.register.email)) {
+  //     this.util.showToast(this.util.translate('Please enter valid email'), 'danger', 'bottom');
+  //     return false;
+  //   }
+
+  //   console.log('verify email');
+  //   this.util.show();
+  //   this.api.post_public('v1/user/verifyEmailRegister', this.register).then((data: any) => {
+  //     console.log(data);
+  //     this.util.hide();
+  //     if (data && data.status == 200) {
+  //       const param = {
+  //         'email': this.register.email,
+  //         'subject': this.util.translate('Verification'),
+  //         'header_text': this.util.translate('Use this code for verification'),
+  //         'thank_you_text': this.util.translate("Don't share this otp to anybody else"),
+  //         'mediaURL': this.api.mediaURL,
+  //       };
+  //       this.isLogin = true;
+  //       this.api.post_public('v1/user/sendRegisterEmail', param).then((data: any) => {
+  //         console.log(data);
+  //         this.isLogin = false;
+  //         if (data && data.status && data.status == 200 && data.data == true && data.otp_id) {
+  //           // this.openVerificationModal(data.otp_id, this.register.email, 'email');
+  //           this.emailVerify = true;
+  //         } else if (data && data.status && data.status == 500 && data.data == false) {
+  //           this.util.errorToast(data.message, 'danger');
+  //         }
+  //       }, error => {
+  //         console.log(error);
+  //         this.isLogin = false;
+  //         if (error && error.error && error.error.status == 500 && error.error.message) {
+  //           this.util.errorToast(error.error.message, 'danger');
+  //         } else if (error && error.error && error.error.error && error.error.status == 422) {
+  //           for (let key in error.error.error) {
+  //             console.log(error.error.error[key][0]);
+  //             this.util.errorToast(error.error.error[key][0], 'danger');
+  //           }
+  //         } else {
+  //           this.util.errorToast(this.util.translate('Something went wrong'), 'danger');
+  //         }
+  //       }).catch(error => {
+  //         console.log(error);
+  //         this.isLogin = false;
+  //         if (error && error.error && error.error.status == 500 && error.error.message) {
+  //           this.util.errorToast(error.error.message, 'danger');
+  //         } else if (error && error.error && error.error.error && error.error.status == 422) {
+  //           for (let key in error.error.error) {
+  //             console.log(error.error.error[key][0]);
+  //             this.util.errorToast(error.error.error[key][0], 'danger');
+  //           }
+  //         } else {
+  //           this.util.errorToast(this.util.translate('Something went wrong'), 'danger');
+  //         }
+  //       });
+  //     } else if (data && data.error && data.error.msg) {
+  //       this.util.errorToast(data.error.msg);
+  //     } else if (data && data.error && data.error.message == 'Validation Error.') {
+  //       for (let key in data.error[0]) {
+  //         console.log(data.error[0][key][0]);
+  //         this.util.errorToast(data.error[0][key][0]);
+  //       }
+  //     } else {
+  //       this.util.errorToast(this.util.translate('Something went wrong'));
+  //     }
+  //   }, error => {
+  //     console.log(error);
+  //     this.util.hide();
+  //     if (error && error.error && error.error.status == 500 && error.error.message) {
+  //       this.util.errorToast(error.error.message);
+  //     } else if (error && error.error && error.error.error && error.error.status == 422) {
+  //       for (let key in error.error.error) {
+  //         console.log(error.error.error[key][0]);
+  //         this.util.errorToast(error.error.error[key][0]);
+  //       }
+  //     } else {
+  //       this.util.errorToast(this.util.translate('Something went wrong'));
+  //     }
+  //   }).catch(error => {
+  //     console.log(error);
+  //     this.util.hide();
+  //     if (error && error.error && error.error.status == 500 && error.error.message) {
+  //       this.util.errorToast(error.error.message);
+  //     } else if (error && error.error && error.error.error && error.error.status == 422) {
+  //       for (let key in error.error.error) {
+  //         console.log(error.error.error[key][0]);
+  //         this.util.errorToast(error.error.error[key][0]);
+  //       }
+  //     } else {
+  //       this.util.errorToast(this.util.translate('Something went wrong'));
+  //     }
+  //   });
+  // }
+
   verifyEmail() {
-    if (this.register.email == '') {
-      this.util.errorToast('Please enter email address', 'danger');
-      return false;
-    }
-
-    const emailfilter = /^[\w._-]+[+]?[\w._-]+@[\w.-]+\.[a-zA-Z]{2,6}$/;
-    if (!emailfilter.test(this.register.email)) {
-      this.util.showToast(this.util.translate('Please enter valid email'), 'danger', 'bottom');
-      return false;
-    }
-
-    console.log('verify email');
-    this.util.show();
-    this.api.post_public('v1/user/verifyEmailRegister', this.register).then((data: any) => {
-      console.log(data);
-      this.util.hide();
-      if (data && data.status == 200) {
-        const param = {
-          'email': this.register.email,
-          'subject': this.util.translate('Verification'),
-          'header_text': this.util.translate('Use this code for verification'),
-          'thank_you_text': this.util.translate("Don't share this otp to anybody else"),
-          'mediaURL': this.api.mediaURL,
-        };
-        this.isLogin = true;
-        this.api.post_public('v1/user/sendRegisterEmail', param).then((data: any) => {
-          console.log(data);
-          this.isLogin = false;
-          if (data && data.status && data.status == 200 && data.data == true && data.otp_id) {
-            this.openVerificationModal(data.otp_id, this.register.email, 'email');
-          } else if (data && data.status && data.status == 500 && data.data == false) {
-            this.util.errorToast(data.message, 'danger');
-          }
-        }, error => {
-          console.log(error);
-          this.isLogin = false;
-          if (error && error.error && error.error.status == 500 && error.error.message) {
-            this.util.errorToast(error.error.message, 'danger');
-          } else if (error && error.error && error.error.error && error.error.status == 422) {
-            for (let key in error.error.error) {
-              console.log(error.error.error[key][0]);
-              this.util.errorToast(error.error.error[key][0], 'danger');
-            }
-          } else {
-            this.util.errorToast(this.util.translate('Something went wrong'), 'danger');
-          }
-        }).catch(error => {
-          console.log(error);
-          this.isLogin = false;
-          if (error && error.error && error.error.status == 500 && error.error.message) {
-            this.util.errorToast(error.error.message, 'danger');
-          } else if (error && error.error && error.error.error && error.error.status == 422) {
-            for (let key in error.error.error) {
-              console.log(error.error.error[key][0]);
-              this.util.errorToast(error.error.error[key][0], 'danger');
-            }
-          } else {
-            this.util.errorToast(this.util.translate('Something went wrong'), 'danger');
-          }
-        });
-      } else if (data && data.error && data.error.msg) {
-        this.util.errorToast(data.error.msg);
-      } else if (data && data.error && data.error.message == 'Validation Error.') {
-        for (let key in data.error[0]) {
-          console.log(data.error[0][key][0]);
-          this.util.errorToast(data.error[0][key][0]);
-        }
-      } else {
-        this.util.errorToast(this.util.translate('Something went wrong'));
-      }
-    }, error => {
-      console.log(error);
-      this.util.hide();
-      if (error && error.error && error.error.status == 500 && error.error.message) {
-        this.util.errorToast(error.error.message);
-      } else if (error && error.error && error.error.error && error.error.status == 422) {
-        for (let key in error.error.error) {
-          console.log(error.error.error[key][0]);
-          this.util.errorToast(error.error.error[key][0]);
-        }
-      } else {
-        this.util.errorToast(this.util.translate('Something went wrong'));
-      }
-    }).catch(error => {
-      console.log(error);
-      this.util.hide();
-      if (error && error.error && error.error.status == 500 && error.error.message) {
-        this.util.errorToast(error.error.message);
-      } else if (error && error.error && error.error.error && error.error.status == 422) {
-        for (let key in error.error.error) {
-          console.log(error.error.error[key][0]);
-          this.util.errorToast(error.error.error[key][0]);
-        }
-      } else {
-        this.util.errorToast(this.util.translate('Something went wrong'));
-      }
-    });
+    this.emailVerify = true;
   }
 
+  // verifyMobile() {
+  //   console.log('verify phone');
+  //   if (this.register.mobile == '') {
+  //     this.util.errorToast('Mobile Number is required', 'danger');
+  //     return false;
+  //   }
+  //   if (this.util.settingInfo.sms_name == '2') {
+  //     console.log('firebase verification');
+  //     this.isLogin = true;
+  //     this.api.post_public('v1/auth/sendRegisterMobile', { country_code: this.register.country_code, mobile: this.register.mobile }).then((data: any) => {
+  //       console.log(data);
+  //       this.isLogin = false;
+  //       if (data && data.status && data.status == 200 && data.data == true) {
+  //         // send otp from api
+  //         // this.openFirebaseAuthModal();
+  //       } else if (data && data.status && data.status == 500 && data.data == false) {
+  //         this.util.errorToast(data.message);
+  //       }
+  //     }, error => {
+  //       console.log(error);
+  //       this.isLogin = false;
+  //       if (error && error.error && error.error.status == 500 && error.error.message) {
+  //         this.util.errorToast(error.error.message);
+  //       } else if (error && error.error && error.error.error && error.error.status == 422) {
+  //         for (let key in error.error.error) {
+  //           console.log(error.error.error[key][0]);
+  //           this.util.errorToast(error.error.error[key][0]);
+  //         }
+  //       } else {
+  //         this.util.errorToast(this.util.translate('Something went wrong'));
+  //       }
+  //     }).catch(error => {
+  //       console.log(error);
+  //       this.isLogin = false;
+  //       if (error && error.error && error.error.status == 500 && error.error.message) {
+  //         this.util.errorToast(error.error.message);
+  //       } else if (error && error.error && error.error.error && error.error.status == 422) {
+  //         for (let key in error.error.error) {
+  //           console.log(error.error.error[key][0]);
+  //           this.util.errorToast(error.error.error[key][0]);
+  //         }
+  //       } else {
+  //         this.util.errorToast(this.util.translate('Something went wrong'));
+  //       }
+  //     });
+  //   } else {
+  //     console.log('other otp');
+  //     const param = {
+  //       'country_code': this.register.country_code,
+  //       'mobile': this.register.mobile,
+  //       'email': this.register.email
+  //     };
+  //     this.isLogin = true;
+  //     this.api.post_public('v1/user/sendVerifyOTPMobile', param).then((data: any) => {
+  //       console.log(data);
+  //       this.isLogin = false;
+  //       if (data && data.status && data.status == 200 && data.data == true && data.otp_id) {
+  //         this.openVerificationModal(data.otp_id, this.register.country_code + this.register.mobile, 'phone');
+  //       } else if (data && data.status && data.status == 500 && data.data == false) {
+  //         this.util.errorToast(data.message, 'danger');
+  //       }
+  //     }, error => {
+  //       console.log(error);
+  //       this.isLogin = false;
+  //       if (error && error.error && error.error.status == 500 && error.error.message) {
+  //         this.util.errorToast(error.error.message, 'danger');
+  //       } else if (error && error.error && error.error.error && error.error.status == 422) {
+  //         for (let key in error.error.error) {
+  //           console.log(error.error.error[key][0]);
+  //           this.util.errorToast(error.error.error[key][0], 'danger');
+  //         }
+  //       } else {
+  //         this.util.errorToast(this.util.translate('Something went wrong'), 'danger');
+  //       }
+  //     }).catch(error => {
+  //       console.log(error);
+  //       this.isLogin = false;
+  //       if (error && error.error && error.error.status == 500 && error.error.message) {
+  //         this.util.errorToast(error.error.message, 'danger');
+  //       } else if (error && error.error && error.error.error && error.error.status == 422) {
+  //         for (let key in error.error.error) {
+  //           console.log(error.error.error[key][0]);
+  //           this.util.errorToast(error.error.error[key][0], 'danger');
+  //         }
+  //       } else {
+  //         this.util.errorToast(this.util.translate('Something went wrong'), 'danger');
+  //       }
+  //     });
+  //   }
+  // }
+
   verifyMobile() {
-    console.log('verify phone');
-    if (this.register.mobile == '') {
-      this.util.errorToast('Mobile Number is required', 'danger');
-      return false;
-    }
-    if (this.util.settingInfo.sms_name == '2') {
-      console.log('firebase verification');
-      this.isLogin = true;
-      this.api.post_public('v1/auth/sendRegisterMobile', { country_code: this.register.country_code, mobile: this.register.mobile }).then((data: any) => {
-        console.log(data);
-        this.isLogin = false;
-        if (data && data.status && data.status == 200 && data.data == true) {
-          // send otp from api
-          this.openFirebaseAuthModal();
-        } else if (data && data.status && data.status == 500 && data.data == false) {
-          this.util.errorToast(data.message);
-        }
-      }, error => {
-        console.log(error);
-        this.isLogin = false;
-        if (error && error.error && error.error.status == 500 && error.error.message) {
-          this.util.errorToast(error.error.message);
-        } else if (error && error.error && error.error.error && error.error.status == 422) {
-          for (let key in error.error.error) {
-            console.log(error.error.error[key][0]);
-            this.util.errorToast(error.error.error[key][0]);
-          }
-        } else {
-          this.util.errorToast(this.util.translate('Something went wrong'));
-        }
-      }).catch(error => {
-        console.log(error);
-        this.isLogin = false;
-        if (error && error.error && error.error.status == 500 && error.error.message) {
-          this.util.errorToast(error.error.message);
-        } else if (error && error.error && error.error.error && error.error.status == 422) {
-          for (let key in error.error.error) {
-            console.log(error.error.error[key][0]);
-            this.util.errorToast(error.error.error[key][0]);
-          }
-        } else {
-          this.util.errorToast(this.util.translate('Something went wrong'));
-        }
-      });
-    } else {
-      console.log('other otp');
-      const param = {
-        'country_code': this.register.country_code,
-        'mobile': this.register.mobile,
-        'email': this.register.email
-      };
-      this.isLogin = true;
-      this.api.post_public('v1/user/sendVerifyOTPMobile', param).then((data: any) => {
-        console.log(data);
-        this.isLogin = false;
-        if (data && data.status && data.status == 200 && data.data == true && data.otp_id) {
-          this.openVerificationModal(data.otp_id, this.register.country_code + this.register.mobile, 'phone');
-        } else if (data && data.status && data.status == 500 && data.data == false) {
-          this.util.errorToast(data.message, 'danger');
-        }
-      }, error => {
-        console.log(error);
-        this.isLogin = false;
-        if (error && error.error && error.error.status == 500 && error.error.message) {
-          this.util.errorToast(error.error.message, 'danger');
-        } else if (error && error.error && error.error.error && error.error.status == 422) {
-          for (let key in error.error.error) {
-            console.log(error.error.error[key][0]);
-            this.util.errorToast(error.error.error[key][0], 'danger');
-          }
-        } else {
-          this.util.errorToast(this.util.translate('Something went wrong'), 'danger');
-        }
-      }).catch(error => {
-        console.log(error);
-        this.isLogin = false;
-        if (error && error.error && error.error.status == 500 && error.error.message) {
-          this.util.errorToast(error.error.message, 'danger');
-        } else if (error && error.error && error.error.error && error.error.status == 422) {
-          for (let key in error.error.error) {
-            console.log(error.error.error[key][0]);
-            this.util.errorToast(error.error.error[key][0], 'danger');
-          }
-        } else {
-          this.util.errorToast(this.util.translate('Something went wrong'), 'danger');
-        }
-      });
-    }
+    this.mobileVerify = true;
   }
 
   async openVerificationModal(id: any, to: any, verify: any) {

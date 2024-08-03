@@ -37,7 +37,7 @@
   <ion-card class="service-card" *ngFor="let item of list" mode="ios" (click)="onCategories(item.id)">
     <ion-item lines="none">
       <ion-thumbnail slot="start">
-        <img [alt]="item.name" [src]="api.mediaURL+item.cover" onError="this.src='assets/imgs/placeholder.jpeg'" />
+        <img [alt]="item.name" [src]="api.mediaURL+item.cover" onError="this.src='assets/imgs/store.png'" />
       </ion-thumbnail>
       <ion-label>
         <h3 class="service-name"> {{item.name}} </h3>

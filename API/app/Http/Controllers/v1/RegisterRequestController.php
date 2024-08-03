@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\RegisterRequest;
 use App\Models\Cities;
 use App\Models\Categories;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class RegisterRequestController extends Controller
 {

@@ -386,8 +386,8 @@ class StoresController extends Controller
     public function getStoresList(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'lat' => 'required',
-            'lng' => 'required',
+            'lat' => '',
+            'lng' => '',
         ]);
         if ($validator->fails()) {
             $response = [
@@ -398,45 +398,46 @@ class StoresController extends Controller
             ];
             return response()->json($response, 404);
         }
-        $searchQuery = Settings::select('allowDistance', 'searchResultKind')->first();
+        $data = Stores::where('status', 1)->orderBy('id', 'desc')->get();
+        
+        // $searchQuery = Settings::select('allowDistance', 'searchResultKind')->first();
+        // if ($searchQuery->searchResultKind == 1) {
+        //     $values = 3959; // miles
+        //     $distanceType = 'miles';
+        // } else {
+        //     $values = 6371; // km
+        //     $distanceType = 'km';
+        // }
+        // $ids = explode(',', $request->uid);
+        // DB::enableQueryLog();
+        // $data = Stores::select(DB::raw('stores.*, ( ' . $values . ' * acos( cos( radians(' . $request->lat . ') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(' . $request->lng . ') ) + sin( radians(' . $request->lat . ') ) * sin( radians( lat ) ) ) ) AS distance'))
+        //     ->having('distance', '<', (int) $searchQuery->allowDistance)
+        //     ->orderBy('distance')
+        //     ->where(['stores.status' => 1])
+        //     ->get();
 
-        if ($searchQuery->searchResultKind == 1) {
-            $values = 3959; // miles
-            $distanceType = 'miles';
-        } else {
-            $values = 6371; // km
-            $distanceType = 'km';
-        }
-        $ids = explode(',', $request->uid);
-        DB::enableQueryLog();
-        $data = Stores::select(DB::raw('stores.*, ( ' . $values . ' * acos( cos( radians(' . $request->lat . ') ) * cos( radians( lat ) ) * cos( radians( lng ) - radians(' . $request->lng . ') ) + sin( radians(' . $request->lat . ') ) * sin( radians( lat ) ) ) ) AS distance'))
-            ->having('distance', '<', (int) $searchQuery->allowDistance)
-            ->orderBy('distance')
-            ->where(['stores.status' => 1])
-            ->get();
+        // foreach ($data as $loop) {
+        //     $loop->distance = round($loop->distance, 2);
+        //     if ($loop && $loop->categories && $loop->categories != null) {
+        //         $ids = explode(',', $loop->categories);
+        //         $cats = Categories::select('name')->WhereIn('id', $ids)->get();
+        //         $loop->web_cates_data = $cats;
+        //     }
 
-        foreach ($data as $loop) {
-            $loop->distance = round($loop->distance, 2);
-            if ($loop && $loop->categories && $loop->categories != null) {
-                $ids = explode(',', $loop->categories);
-                $cats = Categories::select('name')->WhereIn('id', $ids)->get();
-                $loop->web_cates_data = $cats;
-            }
-
-            if ($request->uid != 'NA') {
-                $temp = Favourite::where(['uid' => $request->uid, 'store_uid' => $loop->uid])->first();
-                if (isset($temp) && $temp->id) {
-                    $loop['liked'] = true;
-                } else {
-                    $loop['liked'] = false;
-                }
-            } else {
-                $loop['liked'] = false;
-            }
-        }
+        //     if ($request->uid != 'NA') {
+        //         $temp = Favourite::where(['uid' => $request->uid, 'store_uid' => $loop->uid])->first();
+        //         if (isset($temp) && $temp->id) {
+        //             $loop['liked'] = true;
+        //         } else {
+        //             $loop['liked'] = false;
+        //         }
+        //     } else {
+        //         $loop['liked'] = false;
+        //     }
+        // }
         $response = [
             'data' => $data,
-            'distanceType' => $distanceType,
+            'distanceType' => 10,
             'success' => true,
             'status' => 200,
             'havedata' => true,

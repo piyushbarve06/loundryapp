@@ -10,8 +10,8 @@ use App\Models\Settings;
 use App\Models\Services;
 use App\Models\Stores;
 use App\Models\Complaints;
-use Validator;
-use DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 use PHPOpenSourceSaver\JWTAuth\Facades\JWTAuth;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenExpiredException;
 use PHPOpenSourceSaver\JWTAuth\Exceptions\TokenInvalidException;
@@ -66,7 +66,7 @@ class OrdersController extends Controller
         }
         if ($request && $request->wallet_used == 1) {
             $redeemer = User::where('id', $request->uid)->first();
-            $redeemer->withdraw($request->wallet_price);
+            // $redeemer->withdraw($request->wallet_price);
         }
         $response = [
             'data' => $data,

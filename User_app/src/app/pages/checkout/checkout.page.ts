@@ -349,7 +349,7 @@ export class CheckoutPage implements OnInit {
       this.util.errorToast('Please select pick up date', 'danger');
       return false;
     }
-    if (this.pickupTime == '') {
+    if (this.pickupTime == 'hello') {
       this.util.errorToast('Please select pick up time', 'danger');
       return false;
     }
@@ -357,7 +357,7 @@ export class CheckoutPage implements OnInit {
       this.util.errorToast('Please select delivery date', 'danger');
       return false;
     }
-    if (this.deliveryTime == '') {
+    if (this.deliveryTime == 'hello') {
       this.util.errorToast('Please select delivery time', 'danger');
       return false;
     }
