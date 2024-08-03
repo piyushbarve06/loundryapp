@@ -8,7 +8,7 @@ use App\Models\Referral;
 use App\Models\Redeem;
 use App\Models\ReferralCodes;
 use App\Models\User;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 
 class ReferralController extends Controller
 {
@@ -199,15 +199,15 @@ class ReferralController extends Controller
 
                 if ($scheme->who_received == 1) { // inviter
                     $inviter = User::where('id', $data->uid)->first();
-                    $inviter->deposit($scheme->amount);
+                    // $inviter->deposit($scheme->amount);
                 } else if ($scheme->who_received == 2) { // Who Redeem
                     $redeemer = User::where('id', $request->id)->first();
-                    $redeemer->deposit($scheme->amount);
+                    // $redeemer->deposit($scheme->amount);
                 } else { // both
                     $inviter = User::where('id', $data->uid)->first();
-                    $inviter->deposit($scheme->amount);
+                    // $inviter->deposit($scheme->amount);
                     $redeemer = User::where('id', $request->id)->first();
-                    $redeemer->deposit($scheme->amount);
+                    // $redeemer->deposit($scheme->amount);
                 }
                 $redeemReferralCode = Redeem::create([
                     'owner' => $data->uid,

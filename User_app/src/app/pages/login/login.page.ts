@@ -65,7 +65,7 @@ export class LoginPage implements OnInit {
       fcm_token: localStorage.getItem('pushToken') && localStorage.getItem('pushToken') != null ? localStorage.getItem('pushToken') : 'NA'
     }
     this.api.post_private('v1/profile/update', param).then((data: any) => {
-      console.log(data);
+      // console.log(data);
     }, error => {
       console.log(error);
     }).catch(error => {
@@ -74,7 +74,7 @@ export class LoginPage implements OnInit {
   }
 
   onLogin(form: NgForm) {
-    console.log('form', form);
+    // console.log('form', form);
     this.submitted = true;
     this.chMod.detectChanges();
     if (form.valid) {
@@ -88,7 +88,7 @@ export class LoginPage implements OnInit {
 
       this.api.post_public('v1/auth/login', this.login).then((data: any) => {
         this.isLogin = false;
-        console.log(data);
+        // console.log(data);
         if (data && data.status && data.status == 200 && data.user && data.user.type == 'user') {
           this.util.userInfo = data.user;
           localStorage.setItem('uid', data.user.id);
@@ -131,7 +131,7 @@ export class LoginPage implements OnInit {
           this.util.userInfo = data.user;
           localStorage.setItem('uid', data.user.id);
           localStorage.setItem('token', data.token);
-          this.util.navigateRoot('tabs');
+          this.util.navigateRoot('home');
           this.updateFCMToken();
           this.util.publishNewAddress();
         } else if (data && data.status == 401 && data.error.error) {

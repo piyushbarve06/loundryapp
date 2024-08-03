@@ -37,7 +37,7 @@ export class HomePage implements OnInit {
     this.apiCalled = false;
     const uid = localStorage.getItem('uid') && localStorage.getItem('uid') != null && localStorage.getItem('uid') != 'null' ? localStorage.getItem('uid') : 'NA';
     this.api.post_public('v1/freelancer/getStoresList', { "lat": localStorage.getItem('lat'), "lng": localStorage.getItem('lng'), "uid": uid }).then((data: any) => {
-      console.log(data);
+      // console.log(data);
       this.list = [];
       this.apiCalled = true;
       if (data && data.status && data.status == 200 && data.data && data.data.length) {

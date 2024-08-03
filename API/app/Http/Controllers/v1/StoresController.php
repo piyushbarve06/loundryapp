@@ -11,8 +11,8 @@ use App\Models\User;
 use App\Models\Cities;
 use App\Models\Settings;
 use App\Models\Favourite;
-use Validator;
-use DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class StoresController extends Controller
 {

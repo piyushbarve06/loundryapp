@@ -96,17 +96,17 @@ export class UtilService {
     this.appPage = [
       {
         title: 'Home',
-        url: 'tabs/home',
+        url: 'home',
         icn: 'home-outline'
       },
       {
         title: 'History',
-        url: 'tabs/history',
+        url: 'history',
         icn: 'document-text-outline'
       },
       {
         title: 'Profile',
-        url: 'tabs/account',
+        url: 'account',
         icn: 'person-outline'
       },
       {
