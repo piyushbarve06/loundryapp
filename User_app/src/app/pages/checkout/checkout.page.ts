@@ -603,7 +603,7 @@ export class CheckoutPage implements OnInit {
 
   paymentChange() {
     const payMethod = this.payments.filter(x => x.id == this.pay_method);
-    console.log(payMethod);
+    console.log("paymethod", payMethod);
     if (payMethod && payMethod.length) {
       this.payName = payMethod[0].name;
     }
@@ -664,9 +664,11 @@ export class CheckoutPage implements OnInit {
       "pay_method": this.pay_method,
       "paid": payKey,
       "pickup_date": this.pickupDate,
-      "pickup_slot": this.pickupTime,
+      // "pickup_slot": this.pickupTime,
+      "pickup_slot": 12,
       "delivery_date": this.deliveryDate,
-      "delivery_slot": this.deliveryTime,
+      "delivery_slot": 12,
+      // "delivery_slot": this.deliveryTime,
       'wallet_used': this.walletCheck == true && this.cart.walletDiscount > 0 ? 1 : 0,
       'wallet_price':
         this.walletCheck == true && this.cart.walletDiscount > 0 ? this.cart.walletDiscount : 0,

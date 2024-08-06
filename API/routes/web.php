@@ -18,4 +18,5 @@ Route::get('/', function () {
         'app' => 'Washing API By Initappz',
         'version' => '1.0.0',
     ];
+    // return view('hellotest');
 });

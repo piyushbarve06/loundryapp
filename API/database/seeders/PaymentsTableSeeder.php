@@ -19,7 +19,15 @@ class PaymentsTableSeeder extends Seeder
             'env' => 1,
             'status' => 1,
             'cover' => 'NA',
-            'currency_code' => 'USD'
+            'currency_code' => 'INR'
+        ]);
+
+        Payments::create([
+            'name' => 'Pay later',
+            'env' => 1,
+            'status' => 1,
+            'cover' => 'NA',
+            'currency_code' => 'INR'
         ]);
 
         Payments::create([

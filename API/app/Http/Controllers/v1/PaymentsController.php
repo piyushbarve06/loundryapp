@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Payments;
 use App\Models\Orders;
-use Validator;
+use Illuminate\Support\Facades\Validator;
 use Stripe;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class PaymentsController extends Controller
 {
