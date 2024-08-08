@@ -1,7 +1,0 @@
-{
-  "name": "user-washing",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
-}

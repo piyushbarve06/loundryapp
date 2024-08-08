@@ -1,1 +1,2 @@
-# loundryapp
+# washing-admin
+washing-admin

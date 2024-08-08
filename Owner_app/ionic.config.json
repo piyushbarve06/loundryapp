@@ -1,7 +1,0 @@
-{
-  "name": "owner-washing",
-  "integrations": {
-    "capacitor": {}
-  },
-  "type": "angular"
-}

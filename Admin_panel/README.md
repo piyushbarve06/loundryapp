@@ -1,2 +1,0 @@
-# washing-admin
-washing-admin
